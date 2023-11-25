@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="John Doe">
+
+
+
+
+
+
+
+<title>网络基本概念(一) | NEWDREAM</title>
+
+
+
+    <link rel="icon" href="/blog.ico">
+
+
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=Roboto+Mono&display=swap');
+</style>
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/frame.js"></script>
+    
+
+
+
+
+
+
+
+    <script src='https://unpkg.com/valine@1.4.16/dist/Valine.min.js'></script>
+
+
+
+
+  <meta name="generator" content="Hexo 6.3.0"></head>
+  <body>
+    <div class="mask-border">
+    </div>
+
+    <div class="wrapper">
+
+      <div class="header">
+  <div class="flex-container">
+    <div class="header-inner">
+      <div class="site-brand-container">
+        <a href="/">
+          
+            NewDream
+          
+        </a>
+      </div>
+      <div id="menu-btn" class="menu-btn" onclick="toggleMenu()">
+        Menu
+      </div>
+      <nav class="site-nav">
+        <ul class="menu-list">
+          
+            
+              <li class="menu-item">
+                <a href="/">Home</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/archives/">Archive</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/categories/gallery/">Gallery</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/tag/">Tag</a>
+              </li> 
+                   
+          
+          
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main">
+        <div class="flex-container">
+          <article id="post">
+
+  
+    <div class="post-head">
+    <div class="post-info">
+        <div class="tag-list">
+            
+                
+                    <span class="post-tag">
+                        <a href="/tags/C-%E7%BD%91%E7%BB%9C%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/">
+                            C#网络开发基础
+                        </a>
+                    </span>    
+                           
+            
+        </div>
+        <div class="post-title">
+            
+            
+                网络基本概念(一)
+            
+            
+        </div>
+        <span class="post-date">
+            Oct 17, 2023
+        </span>
+    </div>
+    <div class="post-img">
+        
+            <div class="h-line-primary"></div>
+              
+    </div>
+</div>
+    <div class="post-content">
+    <h2 id="网络的作用："><a href="#网络的作用：" class="headerlink" title="网络的作用："></a>网络的作用：</h2><p>在没有网络之前，每个人的设备（电脑等）都是彼此孤立的，网络的出现让设备之间可以相互通信。</p>
+<p>网络就像是一个由各种设备和它们之间的连接构成的大网络。这些设备可以通过直接或间接的方式通过一些线缆或无线连接在一起。当这些设备想要相互传递消息时，它们会把想说的话转换成一串由0和1组成的数字，这样就可以有效地在它们之间传输了。</p>
+<p>这些数据是以电脉冲的形式进行传输的 线缆中的电压是高低状态之间进行变化的</p>
+<p>因而：</p>
+<ul>
+<li>二进制中<strong>1</strong>是通过产生一个<strong>正电压</strong>来传输的</li>
+<li>二进制中<strong>0</strong>是通过产生一个<strong>负电压</strong>来传输的</li>
+</ul>
+<h2 id="网络的代名词"><a href="#网络的代名词" class="headerlink" title="网络的代名词"></a>网络的代名词</h2><ul>
+<li><strong>网络：</strong>多台设备互相连接，以便它们可以互相交流和共享信息。网络可以是局域网、广域网、也可以是全球范围的互联网</li>
+<li><strong>局域网（LAN）：</strong>一般指地理上较小范围内的网络，通常限制在一个建筑物或工厂、校园内等，设备在局域网中可以快速、高效地相互通信。</li>
+<li><strong>以太网：</strong>指的是一种常用的<strong>局域网技术</strong>，使用在局域网内的设备之间进行数据传输。它使用一种叫做CSMA&#x2F;CD（载波侦听多路访问&#x2F;冲突检测）的协议，允许多个设备共享同一条通信线路。</li>
+<li><strong>城域网：</strong>城域网是介于局域网和广域网之间的网络，它的覆盖范围一般比单一建筑物更大，通常是一个城市。城域网常用于连接多个局域网，使它们可以在城市范围内相互通信。</li>
+<li><strong>广域网：</strong>比城域网还大，可以跨域城市、国家、甚至全球、它通过使用公共或专用的通信线路，连接远离的地点，使得远距离的计算机和设备可以互相通信。</li>
+<li><strong>互联网（因特网）：</strong>互联网是全球最大的网络，连接了世界各地数十亿设备。它是由许多不同类型的网络组成的，使得人们可以在全球范围内共享信息和资源。（就像你可以访问到我的Blog一样）</li>
+<li><strong>万维网：</strong>万维网是互联网的一个重要组成部分，它通过超文本链接（例如网页）将信息组织起来。通过浏览器，用户可以访问万维网上的各种网站，查看文本、图像、视频等多媒体内容。</li>
+</ul>
+<h2 id="路由器和交换机区别"><a href="#路由器和交换机区别" class="headerlink" title="路由器和交换机区别"></a>路由器和交换机区别</h2><p><strong>简单来说：</strong></p>
+<ul>
+<li>路由器：负责在不同网络之间传递数据，确保数据从一个网络到达另一个网络</li>
+<li>交换机：负责在同一网络中连接多个设备，进行内部的数据传输，将数据准确地送到目标设备。</li>
+</ul>
+<h2 id="IP地址分类："><a href="#IP地址分类：" class="headerlink" title="IP地址分类："></a>IP地址分类：</h2><p>按协议分类（目前最常用的还是IPV4的规则）</p>
+<ul>
+<li><p><strong>IPV4：</strong>互联网协议第四版，由四个数组成，每个数值范围是0-255</p>
+<p>  每个数用.来分隔，它的数量是有限的 0.0.0.0~255.255.255.255</p>
+<p>  相当于是由4个字节表示，一个字节八位，255的2进制数则是1111 1111</p>
+<p>  <strong>A类：</strong>0.x.x.x~127.x.x.x（32位2进制最高为0，适用于网内主机数达1600万台的大型网络）</p>
+<p>  <strong>B类：</strong>128.x.x.x~191.x.x.x（32位2进制最高2位为10，适用于中等规模网络，每个网络能够容纳6万台设备）</p>
+<p>  <strong>C类：</strong>192.x.x.x~239.x.x.x（32位2进制最高3位为110，适用于小规模局域网，每个网内最多只包含254台设备）</p>
+<p>  <strong>D类：</strong>224.x.x.x~239.x.x.x（32位2进制最高位4位为1110，属于特殊类型IP，一般为广播地址）</p>
+<p>  <strong>E类：</strong>240.x.x.x~255.x.x.x（32位2进制最高位5位为11110，作为特殊使用）</p>
+</li>
+<li><p><strong>IPV6：</strong>互联网协议第六版，由八个数组成，每个数取值范围是0-65535</p>
+<p>  每个数用:分割，它是为了解决IPV4的有限性而设计的（几乎无限）</p>
+<p>  0:0:0:0:0:0:0:0~65535:65535:65535:65535:65535:65535:65535:65535</p>
+</li>
+</ul>
+<h2 id="公网IP和私网IP"><a href="#公网IP和私网IP" class="headerlink" title="公网IP和私网IP"></a>公网IP和私网IP</h2><p>公网IP（Public IP）和私网IP（Private IP）是在计算机网络中用于标识设备的两种不同类型的IP地址。它们之间的主要区别在于它们在网络中的可见性和访问性。</p>
+<ol>
+<li><strong>公网IP（Public IP）：</strong><ul>
+<li>公网IP是全球唯一的IP地址，用于在<strong>互联网</strong>上标识网络中的设备。</li>
+<li>这些IP地址是由互联网服务提供商（ISP）分配和管理的，并在全球范围内唯一。</li>
+<li>公网IP地址允许设备直接从互联网上访问和被访问。</li>
+</ul>
+</li>
+<li><strong>私网IP（Private IP）：</strong><ul>
+<li>私网IP地址是在局域网（Local Area Network，LAN）<strong>内部</strong>使用的IP地址，用于在局域网中标识设备。</li>
+<li>这些IP地址是由网络管理员分配的，通常在家庭、企业或组织内的局域网中使用。</li>
+<li>私网IP地址通常不能直接从互联网上访问，它们被路由器或防火墙用于在局域网内部进行通信。</li>
+</ul>
+</li>
+</ol>
+<h2 id="端口号："><a href="#端口号：" class="headerlink" title="端口号："></a>端口号：</h2><p>通过IP地址，我们可以在网络上找到一台设备</p>
+<p>但仅仅是找到了这台设备，我想和这台设备的哪个应用程序通信呢？这个时候端口号就起作用了，端口号就是用来区分这些应用程序的，让我们可以明确到底是和哪一个应用程序进行通讯。</p>
+<p>IP地址决定了设备在网络中的具体地址</p>
+<p>而端口是不同应用程序在该设备上的门牌号码</p>
+<p>一台设备上不同的应用程序想要进行通讯就必须对应一个<strong>唯一</strong>的端口号</p>
+<h3 id="端口号使用规则："><a href="#端口号使用规则：" class="headerlink" title="端口号使用规则："></a>端口号使用规则：</h3><p>使用规则：端口号的取值范围是0~65535，我们在进行网络程序开发时，需要自己为应用程序设置端口号，端口号不能和其他应用程序相同，避免产生冲突一般选择1024以上的端口进行使用，1024以下一般由IANA互联网数字分配机构管理</p>
+<h2 id="Mac地址："><a href="#Mac地址：" class="headerlink" title="Mac地址："></a>Mac地址：</h2><p>基本概念：Mac地址（Media Access Control Address）</p>
+<p>直译为媒体存取控制地址，也称局域网地址，Mac地址，以太网地址，物理地址</p>
+<p>它是用来确认网络设备位置的地址，在OSI模型中，第三层网络负责IP地址，第二层数据链路层则负责Mac地址，<strong>Mac地址是用于在网络中唯一标识一个网卡的，一台设备可以有多个网卡，每个网卡都会有一个唯一的Mac地址</strong></p>
+<p>在早期的网络中，只用Mac地址遍可以实现两台设备间的通信，但随着设备的增多，Mac地址虽然具备唯一性但是并不携带位置信息，如果通过广播方式查找设备，会给网络造成巨大负担，所以才有了IP地址来定位网络中的设备，IP地址提供了更灵活的设备标识和位置信息，使得设备可以在全球范围内通信。IP地址的层次结构和路由功能使得数据可以从源设备经过多个网络节点传输到目标设备，而不需要像广播方式那样在整个网络中传播。这提高了网络的效率，并降低了网络流量。</p>
+<h2 id="Mac地址的构成"><a href="#Mac地址的构成" class="headerlink" title="Mac地址的构成"></a>Mac地址的构成</h2><p>基本构成：</p>
+<p>Mac地址的长度为48位（6个字节），通常表示为12个16进制数</p>
+<p>如：00-16-EA-AE-3C-40就是一个MAC地址</p>
+<p>前三个字节，16进制数00-16-EA代表网络硬件制造商的编号，它由IEEE（电气与电子工程师协会）分配。</p>
+<p>后三个字节，16进制数AE-3C-40代表该制造商所制造的某个网络产品（如网卡）的系列号</p>
+<p>Mac地址就像身份证号，IP地址就好像你的住址。Mac地址是物理层面上通信的基础，IP地址是逻辑层面上通信的基础。</p>
+<h2 id="IP地址、端口号、Mac地址"><a href="#IP地址、端口号、Mac地址" class="headerlink" title="IP地址、端口号、Mac地址"></a>IP地址、端口号、Mac地址</h2><p>在互联网中寻找一台指定设备就好像在现实世界中去找朋友串门</p>
+<p>你必须要知道朋友的地址在哪里：</p>
+<p>IP地址 ———— 朋友的住址（某街某小区某栋楼）</p>
+<p>端口    ———— 朋友住所具体的门牌号（具体哪个应用程序）</p>
+<p>在网络通信中</p>
+<p>我们通过IP地址以及端口号定位想要通信的远端计算机中的某个应用程序</p>
+<p>IP地址 ———— 设备在外网中位置</p>
+<p>端口    ———— 运行在该设备上的应用程序位置</p>
+<p>Mac地址 &#x3D; 设备进行网络通讯的唯一标识，设备真正进行物理信息传输用来定位的标识</p>
+<h2 id="客户端和服务端的区分："><a href="#客户端和服务端的区分：" class="headerlink" title="客户端和服务端的区分："></a>客户端和服务端的区分：</h2><p><strong><strong>客户端（Client）：</strong></strong></p>
+<p>客户端是发起与服务器的通信的设备或应用程序。<strong>它是请求服务的一方</strong>。例如：QQ、微信、浏览器，一般来说，用户使用的就是客户端，像QQ，微信这种，打开QQ微信前，要先向服务端发送一系列请求。</p>
+<p><strong><strong>服务端（Server）：</strong></strong></p>
+<p>服务端是提供服务或资源的计算机或设备。它是响应客户端请求的一方。例如：Web服务器（如Apache、Nginx）、邮件服务器（如Exchange、Postfix）、数据库服务器（如MySQL、PostgreSQL）等都是服务端的例子。</p>
+<p>在典型的客户端-服务端模型中，客户端和服务端之间通过网络进行通信。客户端发送请求，服务端响应请求，这样的交互形成了许多互联网服务和应用程序的基础。例如，在Web浏览器中，用户通过浏览器（客户端）发送HTTP请求到Web服务器（服务端），然后服务器响应并发送网页内容回到客户端进行显示。</p>
+<p>笔记来源：【唐老狮】【ChatGPT】</p>
+<p><a target="_blank" rel="noopener" href="https://www.taikr.com/course/1378">https://www.taikr.com/course/1378</a></p>
+
+</div> 
+
+<script>
+    window.onload = detectors();
+</script>
+    <div class="post-footer">
+    <div class="h-line-primary"></div>
+    <nav class="post-nav">
+        <div class="prev-item">
+           
+        </div>
+        <div class="next-item">
+            
+        </div>
+    </nav>
+</div>
+
+    
+      <div class="post-comment">
+
+    
+        <div id="vcomments"></div>
+        <script>
+            var META = ['nick', 'mail', 'link'];
+            var meta = 'nick,mail';
+            meta = meta.split(',').filter(item => {
+                return META.includes(item);
+            });
+            new Valine({
+                el: '#vcomments',
+                appId: 'sfC3VuatNBTX6bDuHmAD9VS6-gzGzoHsz',
+                appKey: 'Cy84cmf4GSkRYuweZjOgapLJ',
+                lang: 'en',
+                placeholder: 'Say something',
+                avatar: 'mp',
+                meta: meta
+            })
+        </script>    
+     
+
+     
+    
+    
+
+</div>
+     
+  
+</article>
+        </div>
+      </div>
+      
+      <div class="footer">
+    <div class="flex-container">
+        <div class="footer-text">
+            
+            
+            
+                Powered by <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a> & <a target="_blank" rel="noopener" href="https://github.com/zoeingwingkei/frame/">Frame</a>
+                
+        </div>
+    </div>
+</div>
+
+    </div>
+
+    
+    
+
+  </body>
+</html>
