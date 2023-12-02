@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="John Doe">
+
+
+
+
+
+
+
+<title>C#网络开发基础——数据通信模型(二) | NEWDREAM</title>
+
+
+
+    <link rel="icon" href="/blog.ico">
+
+
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=Roboto+Mono&display=swap');
+</style>
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/frame.js"></script>
+    
+
+
+
+
+
+
+
+    <script src='https://unpkg.com/valine@1.4.16/dist/Valine.min.js'></script>
+
+
+
+
+  <meta name="generator" content="Hexo 6.3.0"></head>
+  <body>
+    <div class="mask-border">
+    </div>
+
+    <div class="wrapper">
+
+      <div class="header">
+  <div class="flex-container">
+    <div class="header-inner">
+      <div class="site-brand-container">
+        <a href="/">
+          
+            NewDream
+          
+        </a>
+      </div>
+      <div id="menu-btn" class="menu-btn" onclick="toggleMenu()">
+        Menu
+      </div>
+      <nav class="site-nav">
+        <ul class="menu-list">
+          
+            
+              <li class="menu-item">
+                <a href="/">Home</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/archives/">Archive</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/categories/gallery/">Gallery</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/tag/">Tag</a>
+              </li> 
+                   
+          
+          
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main">
+        <div class="flex-container">
+          <article id="post">
+
+  
+    <div class="post-head">
+    <div class="post-info">
+        <div class="tag-list">
+            
+                
+                    <span class="post-tag">
+                        <a href="/tags/C-%E7%BD%91%E7%BB%9C%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/">
+                            C#网络开发基础
+                        </a>
+                    </span>    
+                           
+            
+        </div>
+        <div class="post-title">
+            
+            
+                C#网络开发基础——数据通信模型(二)
+            
+            
+        </div>
+        <span class="post-date">
+            Dec 2, 2023
+        </span>
+    </div>
+    <div class="post-img">
+        
+            <div class="h-line-primary"></div>
+              
+    </div>
+</div>
+    <div class="post-content">
+    <p>在早期的计算机网络中，为了有效的利用计算机，一般将数据通信模型分为：</p>
+<p><strong>分散式（Decentralized）</strong></p>
+<p><strong>集中式（Centralized）</strong></p>
+<p><strong>分布式（Distrbuted）</strong></p>
+<p>这三种方式决定了数据在网络环境中的管理方式</p>
+<h2 id="分散式"><a href="#分散式" class="headerlink" title="分散式"></a>分散式</h2><p>在分散式的模型中，数据处理和管理分布在整个网络中的多个节点上。<strong>每个节点都具有一定的自治性和独立性</strong>，可以独立完成一些任务。</p>
+<p>这种模式由于存在大量共享数据的重复存储，除了引起数据冗余之外，也容易导致一个组织内各部门数据的不一致性。同时还会造成硬件、支持和运营维护等成本的大量增加，因此早被淘汰。</p>
+<h2 id="集中式"><a href="#集中式" class="headerlink" title="集中式"></a>集中式</h2><p>在集中式的模型中，<strong>数据处理和管理集中在一个中心节点或服务器上</strong>。这个中心节点负责协调和管理整个网络中的数据和任务。集中式系统相对简单，易于管理和维护。中心节点可以更容易地实现全局协调，确保数据一致性和可靠性。但是缺点也非常明显，集中式系统存在单点故障的风险，如果中心节点出现故障，整个系统可能无法正常运行。此外，集中式系统可能在面对大量数据或高负载时性能不足。</p>
+<h2 id="分布式"><a href="#分布式" class="headerlink" title="分布式"></a>分布式</h2><p>分布式系统是介于分散式和集中式之间的一种模型。在分布式系统中，<strong>任务和数据分布在网络中的多个节点上</strong>，但这些节点通过通信协作来实现全局目标。它兼具了分散式和集中式的优点，方便数据共享、消除了数据的冗余和不一致性，同样也加强了容错性</p>
+<h2 id="C-S模型"><a href="#C-S模型" class="headerlink" title="C&#x2F;S模型"></a>C&#x2F;S模型</h2><p>C&#x2F;S（Client&#x2F;Server）模型也叫C&#x2F;S模型，指的是<strong>客户端和服务端模式</strong>，它是目前大多数网络通信采用的模型，从程序的角度来说，客户端和服务端打交道相当于是两个应用程序（进程）在打交道</p>
+<h2 id="B-S模型"><a href="#B-S模型" class="headerlink" title="B&#x2F;S模型"></a>B&#x2F;S模型</h2><p>B&#x2F;S（Browse&#x2F;Server）模型也叫B&#x2F;S模型</p>
+<p>它是一种基于Web的通信模型，使用HTTP超文本传送协议通信，B&#x2F;S是一种特殊的C&#x2F;S模型，特殊之处就是这种模型的<strong>客户端不需要我们自己开发</strong>，一般是某种浏览器，比如IE、Chrome、QQ浏览器、360浏览器等等。</p>
+<p>B&#x2F;S模型的优点就是单台计算机可以访问任何一个Web服务器，简单的说就是Web服务器可以随意变，但是客户端是通用的，我们不需要针对不同的服务端专门提供客户端应用程序了。</p>
+<h2 id="P2P模型"><a href="#P2P模型" class="headerlink" title="P2P模型"></a>P2P模型</h2><p>P2P（Peer-to-Peer）模型也叫对等互联，其中各个节点（通常是计算机或设备）平等地与彼此通信，<strong>而无需中心化的服务器</strong>。在P2P网络中，每个节点既是客户端又是服务器，可以共享资源、服务或信息。这种模型与传统的客户端-服务器模型不同，后者依赖于中央服务器来处理请求和提供服务。</p>
+<p>笔记来源：【唐老狮】【ChatGPT】</p>
+<p><a target="_blank" rel="noopener" href="https://www.taikr.com/course/1378">https://www.taikr.com/course/1378</a></p>
+
+</div> 
+
+<script>
+    window.onload = detectors();
+</script>
+    <div class="post-footer">
+    <div class="h-line-primary"></div>
+    <nav class="post-nav">
+        <div class="prev-item">
+           
+                <div class="icon arrow-left"></div>
+                <div class="post-link">
+                    <a href="/2023/12/02/Untitled/">Prev</a>
+                </div>
+            
+        </div>
+        <div class="next-item">
+            
+                <div class="icon arrow-right"></div>
+                <div class="post-link">
+                  <a href="/2023/11/30/%E8%A7%A3%E5%86%B3Git%E6%8A%A5%E9%94%99%EF%BC%9AFailed-to-connect-to-github-com-port-443-after-21012-ms-Couldn-t-connect-to-server/">Next</a>  
+                </div>  
+            
+        </div>
+    </nav>
+</div>
+
+    
+      <div class="post-comment">
+
+    
+        <div id="vcomments"></div>
+        <script>
+            var META = ['nick', 'mail', 'link'];
+            var meta = 'nick,mail';
+            meta = meta.split(',').filter(item => {
+                return META.includes(item);
+            });
+            new Valine({
+                el: '#vcomments',
+                appId: 'sfC3VuatNBTX6bDuHmAD9VS6-gzGzoHsz',
+                appKey: 'Cy84cmf4GSkRYuweZjOgapLJ',
+                lang: 'en',
+                placeholder: 'Say something',
+                avatar: 'mp',
+                meta: meta
+            })
+        </script>    
+     
+
+     
+    
+    
+
+</div>
+     
+  
+</article>
+        </div>
+      </div>
+      
+      <div class="footer">
+    <div class="flex-container">
+        <div class="footer-text">
+            
+            
+            
+                Powered by <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a> & <a target="_blank" rel="noopener" href="https://github.com/zoeingwingkei/frame/">Frame</a>
+                
+        </div>
+    </div>
+</div>
+
+    </div>
+
+    
+    
+
+  </body>
+</html>

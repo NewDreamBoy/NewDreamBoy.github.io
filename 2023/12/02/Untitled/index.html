@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="John Doe">
+
+
+
+
+
+
+
+<title>C#网络开发基础——网络协议之OSI模型（三） | NEWDREAM</title>
+
+
+
+    <link rel="icon" href="/blog.ico">
+
+
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=Roboto+Mono&display=swap');
+</style>
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/frame.js"></script>
+    
+
+
+
+
+
+
+
+    <script src='https://unpkg.com/valine@1.4.16/dist/Valine.min.js'></script>
+
+
+
+
+  <meta name="generator" content="Hexo 6.3.0"></head>
+  <body>
+    <div class="mask-border">
+    </div>
+
+    <div class="wrapper">
+
+      <div class="header">
+  <div class="flex-container">
+    <div class="header-inner">
+      <div class="site-brand-container">
+        <a href="/">
+          
+            NewDream
+          
+        </a>
+      </div>
+      <div id="menu-btn" class="menu-btn" onclick="toggleMenu()">
+        Menu
+      </div>
+      <nav class="site-nav">
+        <ul class="menu-list">
+          
+            
+              <li class="menu-item">
+                <a href="/">Home</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/archives/">Archive</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/categories/gallery/">Gallery</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/tag/">Tag</a>
+              </li> 
+                   
+          
+          
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main">
+        <div class="flex-container">
+          <article id="post">
+
+  
+    <div class="post-head">
+    <div class="post-info">
+        <div class="tag-list">
+            
+                
+                    <span class="post-tag">
+                        <a href="/tags/C-%E7%BD%91%E7%BB%9C%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/">
+                            C#网络开发基础
+                        </a>
+                    </span>    
+                           
+            
+        </div>
+        <div class="post-title">
+            
+            
+                C#网络开发基础——网络协议之OSI模型（三）
+            
+            
+        </div>
+        <span class="post-date">
+            Dec 2, 2023
+        </span>
+    </div>
+    <div class="post-img">
+        
+            <div class="h-line-primary"></div>
+              
+    </div>
+</div>
+    <div class="post-content">
+    <h2 id="网络协议概述"><a href="#网络协议概述" class="headerlink" title="网络协议概述"></a>网络协议概述</h2><p><strong>协议的字面意思：</strong></p>
+<p>经过谈判、协商而制定的共同承认、共同遵守的文件</p>
+<p><strong>网络协议的基本概念：</strong></p>
+<p>网络协议是计算机网络中进行数据交换而建立的规则、标准或约定的集合，指的是计算机网络中互相通信的对等实体之间交换信息时所必须遵守的规则的集合</p>
+<p>说人话：</p>
+<p>如果你想要在网络环境中进行通信，那么网络协议就是你必须遵守的规则</p>
+<p>关于网络协议，主要讲解的内容有：<strong>OSI模型</strong>和<strong>TCP&#x2F;IP协议</strong></p>
+<p>他们两是抽象的理论知识，其实就算我们不学习它们，直接学习网络相关的API也是可以的，但是通过对他们的学习，可以帮助大家理解网络通信时，底层逻辑到底帮我们做了一些什么事情，可以让我们更好的理解网络通信相关的内容，所以还是建议大家认真学习他们。</p>
+<h2 id="OSI模型"><a href="#OSI模型" class="headerlink" title="OSI模型"></a>OSI模型</h2><h3 id="OSI模型是什么"><a href="#OSI模型是什么" class="headerlink" title="OSI模型是什么"></a>OSI模型是什么</h3><ul>
+<li>OSI模型是一种理论上的网络通信体系结构，由国际标准化组织（ISO）制定。它将网络通信划分为七个不同的层次，每个层次负责特定的功能，而且每个层次的功能都构建在下一层的基础上。这七个层次分别是物理层、数据链路层、网络层、传输层、会话层、表示层和应用层。</li>
+<li>OSI模型的目的是为了定义一个通用的网络通信框架，使不同厂商的网络设备和协议能够更好地互操作。然而，在实际应用中，<strong>OSI模型并没有被广泛采用，而更常见的是TCP&#x2F;IP模型</strong>。</li>
+</ul>
+<h3 id="OSI模型的规则"><a href="#OSI模型的规则" class="headerlink" title="OSI模型的规则"></a>OSI模型的规则</h3><p>由于互联网协议（规则）很庞大，很复杂，所以OSI模型采用了分而治之的设计方法，把网络的功能划分不同的多个模块，以分层的形式有机地组合在了一起。</p>
+<p>OSI模型把互联通信的过程抽象的分成了七个层级<strong>（从低往高介绍）</strong></p>
+<ol>
+<li><strong><strong>物理层（Physical Layer）</strong></strong><ul>
+<li><strong>功能：</strong> 物理层是最底层的层次，负责传输原始比特流，定义了硬件设备和传输媒体的特性，例如电缆、光纤、无线电等。</li>
+<li><strong>例子：</strong> 电缆规范、光纤连接、物理连接器。</li>
+</ul>
+</li>
+<li><strong><strong>数据链路层（Data Link Layer）</strong></strong><ul>
+<li><strong>功能：</strong> 数据链路层负责将原始的比特流划分为数据帧，并提供物理地址（MAC地址）以便在共享介质上传输。错误检测和纠正也在这一层进行。</li>
+<li><strong>例子：</strong> 以太网协议、无线局域网协议（Wi-Fi）、点对点协议（PPP）。</li>
+</ul>
+</li>
+<li><strong><strong>网络层（Network Layer）</strong></strong><ul>
+<li><strong>功能：</strong> 网络层负责在网络中寻址和路由数据包。它定义了数据在不同网络之间的传输方式，通过IP地址标识设备和路由选择。</li>
+<li><strong>例子：</strong> Internet协议（IP）、Internet控制报文协议（ICMP）、路由协议（如OSPF、BGP）。</li>
+</ul>
+</li>
+<li><strong><strong>传输层（Transport Layer）</strong></strong><ul>
+<li><strong>功能：</strong> 传输层提供端到端的通信控制，确保数据的可靠性和完整性。它负责分段和重组数据，同时提供流量控制和差错恢复。</li>
+<li><strong>例子：</strong> 传输控制协议（TCP）、用户数据报协议（UDP）。</li>
+</ul>
+</li>
+<li><strong><strong>会话层（Session Layer）</strong></strong><ul>
+<li><strong>功能：</strong> 会话层管理不同设备之间的会话，以确保数据传输的有序性和同步性。它负责建立、维护和终止会话连接。</li>
+<li><strong>例子：</strong> RPC（远程过程调用）、NetBIOS。</li>
+</ul>
+</li>
+<li><strong><strong>表示层（Presentation Layer）</strong></strong><ul>
+<li><strong>功能：</strong> 表示层负责数据的格式化、加密和压缩，以确保不同系统之间的数据交换是相互理解的。它处理数据的语法和语义问题。</li>
+<li><strong>例子：</strong> 图形压缩、加密协议、ASCII、JPEG。</li>
+</ul>
+</li>
+<li><strong><strong>应用层（Application Layer）</strong></strong><ul>
+<li><strong>功能：</strong> 应用层是最顶层的层次，直接提供网络服务给用户应用程序。它定义了用户与网络服务之间的接口。</li>
+<li><strong>例子：</strong> 超文本传输协议（HTTP）、文件传输协议（FTP）、简单邮件传输协议（SMTP）。</li>
+</ul>
+</li>
+</ol>
+<p><img src="https://s2.loli.net/2023/12/02/IxJTHiudKcagQZ9.png" alt="image.png"></p>
+<p>每一层都有自己的功能，就好像建筑物一样，从上到下有很多层构成</p>
+<p>每一层都要靠下一层的支持</p>
+<p>用户接触到的都只是最上面的一层，感受不到下面层级的复杂性</p>
+<p><strong>在实际的通信过程中，数据传输是从最高层（应用层）开始，然后逐层往下通过每个层次，最终到达物理层，通过网络传输到接收方。在接收方，数据则从物理层开始，逐层往上通过每个层次，最终到达应用层。</strong></p>
+<p><strong>具体来说：</strong></p>
+<ol>
+<li><strong>发送端：</strong><ul>
+<li>数据从应用层开始，经过表示层、会话层、传输层、网络层、数据链路层，最终到达物理层。</li>
+<li>在物理层，数据被转化成电子信号或者其他形式，通过网络传输。</li>
+</ul>
+</li>
+<li><strong>接收端：</strong><ul>
+<li>数据在物理层接收，并逐层往上通过数据链路层、网络层、传输层、会话层、表示层，最终到达应用层。</li>
+<li>在应用层，接收端的应用程序获取到原始数据。</li>
+</ul>
+</li>
+</ol>
+<p>我们简单的模拟一下。</p>
+<h3 id="发送方："><a href="#发送方：" class="headerlink" title="发送方："></a>发送方：</h3><p><strong>应用层：</strong>用户决定发送一条消息，比如发送电子邮件</p>
+<p><strong>表现层：</strong>系统对消息进行格式化，确保它可以在网络上传输，比如将文字转换为适当的编码</p>
+<p><strong>会话层：</strong>在系统和目标之间建立通信会话，确保数据传输的有序性，比如建立一个安全的连接</p>
+<p><strong>传输层：</strong>数据被切成小块，每个块都被编号，确保它们按照正确的顺序到达。例如，将一封邮件分为多个数据块，并添加编号</p>
+<p><strong>网络层：</strong>在数据块上添加网络地址，以确定数据的最终目的地。就像写在信封上的邮寄地址。</p>
+<p><strong>数据链路层：</strong>在数据块上添加物理地址，确定数据的下一个跳。类似于信封上写的详细地址。</p>
+<p><strong>物理层：</strong>将数据块转换为比特流，并通过物理介质（电缆、光纤等）传输。就像将信封通过邮寄服务传递到目的地。</p>
+<h3 id="接收端："><a href="#接收端：" class="headerlink" title="接收端："></a>接收端：</h3><p><strong>物理层：</strong>在接收端，物理层接收到比特流，并将其转换为数据块</p>
+<p><strong>数据链路层：</strong>数据块通过物理层后，数据链路层使用物理地址将其传递给正确的设备。</p>
+<p><strong>网络层：</strong>根据网络地址，网络层将数据块路由到正确的目的地。</p>
+<p><strong>传输层：</strong>传输层接收到数据块后，将其组装为完整的消息，并确保消息的完整性和顺序性。</p>
+<p><strong>会话层：</strong>会话层在接收端管理与发送端的通信会话，确保数据的顺序和同步性。</p>
+<p><strong>表现层：</strong>表示层负责解码数据，确保接收端能够正确理解发送端的格式化处理。</p>
+<p><strong>应用层：</strong>最终，应用层将处理好的消息呈现给接收端的应用程序，例如显示在电子邮件客户端中。</p>
+<h2 id="OSI模型对于我们的意义"><a href="#OSI模型对于我们的意义" class="headerlink" title="OSI模型对于我们的意义"></a>OSI模型对于我们的意义</h2><p>OSI七层模型是更偏向于理论的知识点</p>
+<p>说实话就算我们不学习它，直接学习网络相关API的知识点，也是完全没影响的，但是通过OSI七层模型的学习，可以帮助我们理解之后的重点知识点TCP&#x2F;IP协议</p>
+<p>对于OSI七层模型你只需要大概了解每一层定义的规则是什么，它们分别要做些什么事情，我们在实际开发的时候其实是接触不到大部分层级内容的。</p>
+<p>笔记来源：【唐老狮】【ChatGPT】</p>
+<p><a target="_blank" rel="noopener" href="https://www.taikr.com/course/1378">https://www.taikr.com/course/1378</a></p>
+
+</div> 
+
+<script>
+    window.onload = detectors();
+</script>
+    <div class="post-footer">
+    <div class="h-line-primary"></div>
+    <nav class="post-nav">
+        <div class="prev-item">
+           
+        </div>
+        <div class="next-item">
+            
+                <div class="icon arrow-right"></div>
+                <div class="post-link">
+                  <a href="/2023/12/02/%E6%95%B0%E6%8D%AE%E9%80%9A%E4%BF%A1%E6%A8%A1%E5%9E%8B-%E4%BA%8C/">Next</a>  
+                </div>  
+            
+        </div>
+    </nav>
+</div>
+
+    
+      <div class="post-comment">
+
+    
+        <div id="vcomments"></div>
+        <script>
+            var META = ['nick', 'mail', 'link'];
+            var meta = 'nick,mail';
+            meta = meta.split(',').filter(item => {
+                return META.includes(item);
+            });
+            new Valine({
+                el: '#vcomments',
+                appId: 'sfC3VuatNBTX6bDuHmAD9VS6-gzGzoHsz',
+                appKey: 'Cy84cmf4GSkRYuweZjOgapLJ',
+                lang: 'en',
+                placeholder: 'Say something',
+                avatar: 'mp',
+                meta: meta
+            })
+        </script>    
+     
+
+     
+    
+    
+
+</div>
+     
+  
+</article>
+        </div>
+      </div>
+      
+      <div class="footer">
+    <div class="flex-container">
+        <div class="footer-text">
+            
+            
+            
+                Powered by <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a> & <a target="_blank" rel="noopener" href="https://github.com/zoeingwingkei/frame/">Frame</a>
+                
+        </div>
+    </div>
+</div>
+
+    </div>
+
+    
+    
+
+  </body>
+</html>
