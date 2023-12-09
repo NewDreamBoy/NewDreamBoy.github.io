@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="John Doe">
+
+
+
+
+
+
+
+<title>C#网络开发基础（五）——TCP和UDP | NEWDREAM</title>
+
+
+
+    <link rel="icon" href="/blog.ico">
+
+
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=Roboto+Mono&display=swap');
+</style>
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/frame.js"></script>
+    
+
+
+
+
+
+
+
+    <script src='https://unpkg.com/valine@1.4.16/dist/Valine.min.js'></script>
+
+
+
+
+  <meta name="generator" content="Hexo 6.3.0"></head>
+  <body>
+    <div class="mask-border">
+    </div>
+
+    <div class="wrapper">
+
+      <div class="header">
+  <div class="flex-container">
+    <div class="header-inner">
+      <div class="site-brand-container">
+        <a href="/">
+          
+            NewDream
+          
+        </a>
+      </div>
+      <div id="menu-btn" class="menu-btn" onclick="toggleMenu()">
+        Menu
+      </div>
+      <nav class="site-nav">
+        <ul class="menu-list">
+          
+            
+              <li class="menu-item">
+                <a href="/">Home</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/archives/">Archive</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/categories/gallery/">Gallery</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/tag/">Tag</a>
+              </li> 
+                   
+          
+          
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main">
+        <div class="flex-container">
+          <article id="post">
+
+  
+    <div class="post-head">
+    <div class="post-info">
+        <div class="tag-list">
+            
+                
+                    <span class="post-tag">
+                        <a href="/tags/C-%E7%BD%91%E7%BB%9C%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/">
+                            C#网络开发基础
+                        </a>
+                    </span>    
+                           
+            
+        </div>
+        <div class="post-title">
+            
+            
+                C#网络开发基础（五）——TCP和UDP
+            
+            
+        </div>
+        <span class="post-date">
+            Dec 9, 2023
+        </span>
+    </div>
+    <div class="post-img">
+        
+            <div class="h-line-primary"></div>
+              
+    </div>
+</div>
+    <div class="post-content">
+    <h2 id="TCP协议协议中的重要协议"><a href="#TCP协议协议中的重要协议" class="headerlink" title="TCP协议协议中的重要协议"></a>TCP协议协议中的重要协议</h2><p><strong>应用层协议：</strong></p>
+<ul>
+<li><strong>HTTP协议：</strong>HTTP是用于在Web上传输超文本的协议。它建立在TCP协议的基础上，用于在客户端和服务器之间传递信息，支持无状态的请求-响应模型。</li>
+<li><strong>HTTPS协议：</strong>HTTPS是在HTTP基础上添加了安全性的协议。它使用了SSL&#x2F;TLS协议来对传输的数据进行加密，确保通信的隐私和完整性。</li>
+<li><strong>FTP协议：</strong>FTP是用于在网络上传输文件的协议。它提供了一种将文件从一个计算机传输到另一个计算机的标准方式</li>
+<li><strong>DNS协议：</strong>DNS是将域名映射到IP地址的协议。它允许我们使用易记的域名而不是数字形式的IP地址来访问网站。</li>
+</ul>
+<p><strong>传输层协议：</strong></p>
+<ul>
+<li><strong>TCP协议：</strong>TCP是整个TCP&#x2F;IP协议族中最重要的协议之一。它提供了面向连接的、可靠的、基于字节流的通信。</li>
+<li><strong>UDP协议：</strong>UDP是一种无连接的协议，发送数据之前不需要建立连接。每个数据包都是独立的，没有先后顺序的限制。</li>
+</ul>
+<p><strong>网络层协议：</strong></p>
+<ul>
+<li>IP协议：IP不仅是TCP协议的伙伴，也是整个互联网通信的核心。IP负责在网络中传递数据包，使其从源地址到达目标地址。</li>
+</ul>
+<h2 id="TCP协议"><a href="#TCP协议" class="headerlink" title="TCP协议"></a>TCP协议</h2><p>TCP(Transmission COntrol Protocol，传输控制协议)</p>
+<p>是面向连接的协议，也就是说，在收发数据前，<strong>必须和对方建立可靠的连接，并且在消息传送过程中是有顺序的，并且是不会丢包（丢弃信息）的</strong>，如果某一条信息在传送过程中失败了，会重新发送信息，直到成功。</p>
+<p>TCP协议特点：</p>
+<ol>
+<li>面向连接   ————   两者之间必须建立可靠的连接</li>
+<li>一对一      ————   只能是1对1的建立连接</li>
+<li>可靠性高  ————   消息传送失败会重新发送，不允许丢包</li>
+<li>有序的      ————   是按照顺序进行信息发送的</li>
+</ol>
+<h2 id="TCP协议的三次握手（建立连接）"><a href="#TCP协议的三次握手（建立连接）" class="headerlink" title="TCP协议的三次握手（建立连接）"></a>TCP协议的三次握手（建立连接）</h2><p>TCP的三次握手是在建立TCP连接时的一种协商过程，<strong>用于确保双方都同意建立连接</strong>。这个过程的目的是保证双方的初始序列号、窗口大小等参数都被正确地初始化。</p>
+<p>在了解三次握手之前先来了解一些基础的概念：<strong>SYN</strong>和<strong>ACK</strong>：</p>
+<p>**<code>SYN</code><strong>和</strong><code>ACK</code>**是TCP协议中的标志位，用于在TCP报文头中传递信息。这些标志位在TCP的三次握手过程中扮演着重要的角色：</p>
+<p><strong>SYN（Synchronize）：</strong></p>
+<ul>
+<li>**<code>SYN</code><strong>标志位表示发起一个新连接。当客户端想要建立连接时，它会向服务器发送一个带有</strong><code>SYN</code>**标志的TCP报文。这告诉服务器客户端希望建立连接，并开始一个新的会话。在第一次握手中，这个标志位是被设置的。</li>
+</ul>
+<p><strong>ACK（Acknowledge）：</strong></p>
+<ul>
+<li>**<code>ACK</code><strong>标志位表示确认。在TCP的通信中，</strong><code>ACK</code><strong>标志用于确认接收到的数据。在三次握手中的第二次握手和第三次握手中，</strong><code>ACK</code><strong>标志表示接收方已经成功接收到了前一步的数据。在第二次握手中，服务器发送的带有</strong><code>SYN</code><strong>和</strong><code>ACK</code><strong>标志的报文，表示它接受了客户端的请求，并且已准备好建立连接。在第三次握手中，客户端发送的带有</strong><code>ACK</code>**标志的报文，表示它接收到了服务器的确认，连接建立完成。</li>
+</ul>
+<p><strong>SYN和ACK有一个概念之后，就来看看三次握手都做了什么！</strong></p>
+<h3 id="第一次握手（SYN）"><a href="#第一次握手（SYN）" class="headerlink" title="第一次握手（SYN）"></a><strong>第一次握手（SYN）</strong></h3><ol>
+<li><strong>客户端发送请求（SYN）：</strong><ul>
+<li>客户端首先向服务器发送一个TCP报文，该报文包含一个设置了<code>SYN</code>（同步）标志的标头。这个标志<strong>表示客户端希望建立连接</strong>。</li>
+</ul>
+</li>
+<li><strong>服务器收到请求：</strong><ul>
+<li>服务器接收到客户端的<code>SYN</code>报文后，意味着客户端想要建立连接。服务器为这个连接分配资源，并发送一个<strong>确认报文</strong>（<code>ACK</code>）作为响应，同时也设置了SYN标志。</li>
+</ul>
+</li>
+</ol>
+<h3 id="第二次握手（SYN-ACK）"><a href="#第二次握手（SYN-ACK）" class="headerlink" title="第二次握手（SYN + ACK）"></a><strong>第二次握手（SYN + ACK）</strong></h3><ol>
+<li><strong>服务器发送响应（SYN + ACK）：</strong><ul>
+<li>服务器向客户端发送一个TCP报文，该报文包含设置了<code>SYN</code>和<code>ACK</code>标志的标头。<strong>这个SYN标志表示服务器同意建立连接，而ACK标志表示服务器收到了客户端的请求，并确认了客户端的SYN。</strong></li>
+</ul>
+</li>
+<li><strong>客户端收到响应：</strong><ul>
+<li>客户端收到服务器的响应后，确认了服务器的SYN，同时也表示客户端已经知道了服务器愿意建立连接。客户端发送一个确认报文（ACK），并设置了ACK标志。</li>
+</ul>
+</li>
+</ol>
+<h3 id="第三次握手（ACK）"><a href="#第三次握手（ACK）" class="headerlink" title="第三次握手（ACK）"></a><strong>第三次握手（ACK）</strong></h3><ol>
+<li><strong>客户端发送确认（ACK）：</strong><ul>
+<li>客户端向服务器发送一个确认报文，该报文包含了设置了<code>ACK</code>标志的标头。<strong>这个ACK标志表示客户端收到了服务器的响应，完成了三次握手。</strong></li>
+</ul>
+</li>
+<li><strong>服务器收到确认：</strong><ul>
+<li>服务器收到客户端的确认报文后，<strong>确认了客户端的</strong><code>SYN</code><strong>，表示连接建立成功</strong>。此时，双方都可以开始在这个连接上传输数据。</li>
+</ul>
+</li>
+</ol>
+<p>这就是TCP协议中最重要的概念之一：三次握手</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">C                           S</span><br><span class="line">|                           |</span><br><span class="line">| -------  SYN  -------&gt;    |</span><br><span class="line">|                           |</span><br><span class="line">|    &lt;--- SYN ACK ------    |</span><br><span class="line">|                           |</span><br><span class="line">| -------  ACK  -------&gt;    |</span><br><span class="line">|                           |</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://s2.loli.net/2023/12/09/GOPRfdDTi3NmthE.png" alt="image.png"></p>
+<p>随便解释一下图片中的内容</p>
+<p><strong>第一次握手：</strong></p>
+<p><strong><code>SYN=1</code></strong>: 表示这是一个发起连接的请求。</p>
+<p><strong><code>Seq=x</code></strong>: 表示这个报文的序列号，x是一个由客户端随机选择的初始序列号，用于后续的数据传输。</p>
+<p>所以，第一次握手的报文头描述了客户端请求建立连接，并指定了客户端选择的初始序列号。</p>
+<p><strong>第二次握手：</strong></p>
+<p><strong><code>SYN=1</code></strong>: 仍然表示连接请求。</p>
+<p><strong><code>ACK=X+1</code></strong>: 表示这个报文是对第一次握手的回应，同时确认了客户端的序列号（即X+1）。</p>
+<p><strong><code>Seq=Y</code></strong>: 表示服务器选择的初始序列号，用于后续的数据传输。</p>
+<p><strong>第三次握手：</strong></p>
+<p><strong><code>ACK=Y+1</code></strong> 表示服务器收到了客户端的确认，并且确认了客户端的序列号（即Y+1）。</p>
+<p><strong><code>Seq=Z</code></strong> 表示服务器选择的新的序列号，用于后续的数据传输。</p>
+<p>所以，第三次握手的报文头描述了服务器对客户端的确认，确认了客户端的序列号，并指定了服务器新的序列号。这样，双方就完成了三次握手，TCP连接建立成功。</p>
+<p>再解释一下这里的序列号作用：</p>
+<p>TCP通过给发送的数据流中的每个字节分配一个唯一的序列号，以确保接收方能够按照正确的顺序重组数据。这样，即使网络中的数据包乱序到达，接收方也能够通过序列号将它们重新排序。</p>
+<p>假设有这样的数据流：</p>
+<ol>
+<li>发送方发送X数据</li>
+<li>发送方发送Y数据</li>
+<li>发送方发送Z数据</li>
+</ol>
+<p>序列号的作用是确保接收方能够按照X、Y、Z的正确顺序重组这些数据。如果不使用序列号，而仅仅依赖于数据包的到达顺序，可能会出现类似Y、X、Z的混乱顺序。</p>
+<p>通过给每个字节分配唯一的序列号，TCP可以有效地管理和恢复乱序的数据包，从而保证了数据的有序传输和接收方的正确解析。</p>
+<h2 id="TCP协议的四次挥手（断开连接）"><a href="#TCP协议的四次挥手（断开连接）" class="headerlink" title="TCP协议的四次挥手（断开连接）"></a>TCP协议的四次挥手（断开连接）</h2><p>讲解完连接的三次握手，就该来聊聊<strong>断开连接</strong>的<strong>四次挥手</strong>了</p>
+<h3 id="第一次挥手"><a href="#第一次挥手" class="headerlink" title="第一次挥手"></a><strong>第一次挥手</strong></h3><p><strong>客户端发送关闭请求（FIN）：</strong></p>
+<p>客户端决定关闭连接，向服务器发送一个带有**<code>FIN</code>**标志的TCP报文，表示它不再发送数据。</p>
+<h3 id="第二次挥手"><a href="#第二次挥手" class="headerlink" title="第二次挥手"></a><strong>第二次挥手</strong></h3><p><strong>服务器发送确认（ACK）：</strong></p>
+<p>服务器收到客户端的关闭请求后，发送一个带有**<code>ACK</code><strong>标志的报文，确认收到了客户端的关闭请求。服务器现在进入半关闭状态，</strong>不再接收客户端的数据，但仍可以向客户端发送数据（服务器会将所有未发送完的数据发送给客户端，确保在关闭连接之前所有的数据都得到传输。）**</p>
+<p><strong>这里需要注意：</strong></p>
+<p>这个过程可以在第三次挥手前完成，也可以在第三次挥手时同时进行。通常，服务器在发送完剩余数据后才发送第三次挥手的**<code>FIN</code><strong>标志，但并不是强制的。即使服务器在发送</strong><code>FIN</code><strong>之前还有一些未发送完的数据，仍然是合法的。这是因为</strong><code>FIN</code><strong>标志表示服务器已经完成数据发送，而不是必须在</strong><code>FIN</code>**之前发送完所有数据。</p>
+<p>所以，在实际的实现中，可能会有一小段时间的交叉，即服务器在发送**<code>FIN</code>**之前还在发送一些剩余的数据。这确保了数据的完整性和正确性，同时完成了连接的关闭。</p>
+<h3 id="第三次挥手"><a href="#第三次挥手" class="headerlink" title="第三次挥手"></a><strong>第三次挥手</strong></h3><p><strong>服务器发送关闭请求（FIN）：</strong></p>
+<p>当服务器决定断开连接时，它发送一个带有**<code>FIN</code>**标志的报文给客户端，表示服务器不再发送数据。</p>
+<h3 id="第四次挥手"><a href="#第四次挥手" class="headerlink" title="第四次挥手"></a><strong>第四次挥手</strong></h3><p><strong>客户端发送确认（ACK）：</strong></p>
+<p>客户端收到服务器的关闭请求后，发送一个带有**<code>ACK</code><strong>标志的报文给服务器，表示客户端确认了服务器的关闭请求。此时，客户端进入</strong><code>TIME_WAIT</code>**状态，等待可能出现的延迟数据包。</p>
+<p>在这个过程中，四次挥手确保双方都有机会通知对方它们不再发送数据，并在确认关闭请求后等待一段时间，以确保对方有足够的时间接收并处理可能的延迟数据包。这样，TCP连接就完成了断开。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Client ----FIN----&gt; Server  ： 客户端：我要下班了，你搞快点</span><br><span class="line">Client &lt;---ACK---- Server   ： 服务器：知道了，数据马上发完了</span><br><span class="line">Client &lt;---FIN---- Server   ： 服务器：发完了下班下班</span><br><span class="line">Client ----ACK----&gt; Server  ： 客户端：可以可以下班下班</span><br></pre></td></tr></table></figure>
+
+<p>正因为TCP有三次握手、四次挥手的规则，TCP才能够提供可靠的服务，通过TCP连接传送的数据，可以做到无差错，不丢失，不重复，且按顺序到达。让服务器和客户端之间的数据传递变得更加的可靠</p>
+<h2 id="UDP协议"><a href="#UDP协议" class="headerlink" title="UDP协议"></a>UDP协议</h2><p>UDP（User Datagram Protocol，用户数据报协议）</p>
+<p>是一种<strong>无需建立连接</strong>就可以发送封装的IP数据包的方法</p>
+<p>提供面向事务的简单不可靠信息传送服务</p>
+<p>它的特点是：</p>
+<ol>
+<li>无连接            ————   两者之间无需建立连接</li>
+<li>可靠性低        ————   消息可能在传送过程中丢失，丢失后不会重发</li>
+<li>传输效率高    ————   由于它的可靠性低并且也无需建立连接，所以传输效率上更高一些</li>
+<li>n对n              ————    TCP只能1对1连接进行消息传递，而UDP由于无连接所以可以n对n</li>
+</ol>
+<p>既然无需建立连接，那UDP自然就没有像TCP协议需要建立连接那样有三次握手和断开连接的四次握手了，当使用UDP协议发送信息时，会直接把信息数据扔到网络上，所以也就造成了UDP的不可靠性，信息在这个传递过程中是有可能丢失的，虽然UDP是一个不靠谱的协议，但是由于它不需要建立连接也不会像TCP协议那样携带更多的信息，所以它具有更好的传输效率，它具有资源消耗小，处理速度快的特点。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p><strong>TCP：</strong></p>
+<p>更可靠，保证数据的正确性和有序性（三次握手和四次挥手）</p>
+<p>适合对信息准确性要求高，效率要求较低的使用场景：</p>
+<p>比如：游戏领域，文件传输，远程登录等等</p>
+<p><strong>UDP：</strong></p>
+<p>更效率，传输更快，资源消耗更少</p>
+<p>适合对实时性要求高的使用场景</p>
+<p>比如：直播，即时通讯，游戏开发等等</p>
+<p>笔记来源：【唐老狮】【ChatGPT】</p>
+<p><a target="_blank" rel="noopener" href="https://www.taikr.com/course/1378">https://www.taikr.com/course/1378</a></p>
+
+</div> 
+
+<script>
+    window.onload = detectors();
+</script>
+    <div class="post-footer">
+    <div class="h-line-primary"></div>
+    <nav class="post-nav">
+        <div class="prev-item">
+           
+                <div class="icon arrow-left"></div>
+                <div class="post-link">
+                    <a href="/2023/12/09/C-%E7%BD%91%E7%BB%9C%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80%EF%BC%88%E5%85%AD%EF%BC%89%E2%80%94%E2%80%94TCP%E5%92%8CUDP/">Prev</a>
+                </div>
+            
+        </div>
+        <div class="next-item">
+            
+                <div class="icon arrow-right"></div>
+                <div class="post-link">
+                  <a href="/2023/12/09/-%E7%BD%91%E7%BB%9C%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80%EF%BC%88%E5%9B%9B%EF%BC%89%E2%80%94%E2%80%94%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE%E4%B9%8BOSI%E6%A8%A1%E5%9E%8B/">Next</a>  
+                </div>  
+            
+        </div>
+    </nav>
+</div>
+
+    
+      <div class="post-comment">
+
+    
+        <div id="vcomments"></div>
+        <script>
+            var META = ['nick', 'mail', 'link'];
+            var meta = 'nick,mail';
+            meta = meta.split(',').filter(item => {
+                return META.includes(item);
+            });
+            new Valine({
+                el: '#vcomments',
+                appId: 'sfC3VuatNBTX6bDuHmAD9VS6-gzGzoHsz',
+                appKey: 'Cy84cmf4GSkRYuweZjOgapLJ',
+                lang: 'en',
+                placeholder: 'Say something',
+                avatar: 'mp',
+                meta: meta
+            })
+        </script>    
+     
+
+     
+    
+    
+
+</div>
+     
+  
+</article>
+        </div>
+      </div>
+      
+      <div class="footer">
+    <div class="flex-container">
+        <div class="footer-text">
+            
+            
+            
+                Powered by <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a> & <a target="_blank" rel="noopener" href="https://github.com/zoeingwingkei/frame/">Frame</a>
+                
+        </div>
+    </div>
+</div>
+
+    </div>
+
+    
+    
+
+  </body>
+</html>

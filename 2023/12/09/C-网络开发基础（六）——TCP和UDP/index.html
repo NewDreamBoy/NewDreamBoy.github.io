@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="John Doe">
+
+
+
+
+
+
+
+<title>C#网络开发基础（六）——网络游戏通讯方案 | NEWDREAM</title>
+
+
+
+    <link rel="icon" href="/blog.ico">
+
+
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=Roboto+Mono&display=swap');
+</style>
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/frame.js"></script>
+    
+
+
+
+
+
+
+
+    <script src='https://unpkg.com/valine@1.4.16/dist/Valine.min.js'></script>
+
+
+
+
+  <meta name="generator" content="Hexo 6.3.0"></head>
+  <body>
+    <div class="mask-border">
+    </div>
+
+    <div class="wrapper">
+
+      <div class="header">
+  <div class="flex-container">
+    <div class="header-inner">
+      <div class="site-brand-container">
+        <a href="/">
+          
+            NewDream
+          
+        </a>
+      </div>
+      <div id="menu-btn" class="menu-btn" onclick="toggleMenu()">
+        Menu
+      </div>
+      <nav class="site-nav">
+        <ul class="menu-list">
+          
+            
+              <li class="menu-item">
+                <a href="/">Home</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/archives/">Archive</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/categories/gallery/">Gallery</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/tag/">Tag</a>
+              </li> 
+                   
+          
+          
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main">
+        <div class="flex-container">
+          <article id="post">
+
+  
+    <div class="post-head">
+    <div class="post-info">
+        <div class="tag-list">
+            
+                
+                    <span class="post-tag">
+                        <a href="/tags/C-%E7%BD%91%E7%BB%9C%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/">
+                            C#网络开发基础
+                        </a>
+                    </span>    
+                           
+            
+        </div>
+        <div class="post-title">
+            
+            
+                C#网络开发基础（六）——网络游戏通讯方案
+            
+            
+        </div>
+        <span class="post-date">
+            Dec 9, 2023
+        </span>
+    </div>
+    <div class="post-img">
+        
+            <div class="h-line-primary"></div>
+              
+    </div>
+</div>
+    <div class="post-content">
+    <h2 id="主要内容："><a href="#主要内容：" class="headerlink" title="主要内容："></a>主要内容：</h2><ol>
+<li>弱联网和强联网游戏</li>
+<li>长连接和短连接游戏</li>
+<li>Socket、HTTP、FTP</li>
+</ol>
+<h2 id="弱联网和强联网游戏"><a href="#弱联网和强联网游戏" class="headerlink" title="弱联网和强联网游戏"></a>弱联网和强联网游戏</h2><p>通过之前的知识我们知道，网络游戏是以C&#x2F;S模型为基础进行开发的，由客户端和服务端组成</p>
+<h3 id="弱联网游戏："><a href="#弱联网游戏：" class="headerlink" title="弱联网游戏："></a><strong>弱联网游戏：</strong></h3><p>这种游戏不会频繁的进行数据通信，大部分情况下<strong>客户端和服务端之间每次连接至处理一次请求</strong>，服务器处理玩客户端的请求后返回数据后就断开连接了</p>
+<h3 id="弱联网游戏代表："><a href="#弱联网游戏代表：" class="headerlink" title="弱联网游戏代表："></a><strong>弱联网游戏代表：</strong></h3><p>一般的三消类休闲游戏，卡牌游戏等都会是弱联网游戏，这些游戏的核心玩法都由客户端完成，客户端处理完成后只是告诉服务端一个结果，服务端验证结果即可，不需要随时通信，比如：开心消消乐、刀塔传奇，我叫MT等。</p>
+<h3 id="弱联网游戏也可以叫短连接游戏："><a href="#弱联网游戏也可以叫短连接游戏：" class="headerlink" title="弱联网游戏也可以叫短连接游戏："></a><strong>弱联网游戏也可以叫短连接游戏：</strong></h3><p>需要传输数据时，建立连接，传输数据，获得响应，断开连接</p>
+<p><strong>通信特点：</strong>需要通信时再连接，通信完毕断开连接</p>
+<p><strong>通信方式：</strong>HTTP超文本传输协议、HTTPS安全的超文本传输协议（他们本质上是TCP协议）</p>
+<h3 id="强联网游戏："><a href="#强联网游戏：" class="headerlink" title="强联网游戏："></a><strong>强联网游戏：</strong></h3><p>这种游戏会频繁的和服务端进行通信，会<strong>一直和服务端保持连接状态，不停的和服务器之间交换数据。</strong></p>
+<h3 id="强联网游戏代表："><a href="#强联网游戏代表：" class="headerlink" title="强联网游戏代表："></a><strong>强联网游戏代表：</strong></h3><p>一般的MMORPG（角色扮演）、MOBA（多人在线竞技游戏）、ACT（动作游戏）等等都会是强联网游戏，这些游戏的部分核心逻辑是由服务端进行处理，客户端和服务端之间不停的在同步信息，比如：王者荣耀、守望先锋、和平精英等等。</p>
+<h3 id="强联网游戏也可以叫长连接游戏："><a href="#强联网游戏也可以叫长连接游戏：" class="headerlink" title="强联网游戏也可以叫长连接游戏："></a>强<strong>联网游戏也可以叫长连接游戏：</strong></h3><p>不管是否需要传递数据，客户端与服务器一直处于连接状态，除非一端主动断开，或者出现意外情况（客户端关闭或服务端崩溃等）</p>
+<p><strong>通信特点：</strong>连接一直建立，可以实时的传输数据</p>
+<p><strong>通信方式：</strong>TCP传输控制协议 或 UDP用户数据报协议</p>
+<h2 id="Socket"><a href="#Socket" class="headerlink" title="Socket"></a>Socket</h2><p><strong>Socket：网络套接字</strong>，是对网络中不同主机上的应用进程之间进行双向通信的端点的抽象，一个套接字就是网络上进程通信的一端，提供了应用层进程利用网络协议交换数据的机制</p>
+<p>我们之后主要学习的就是Socket网络套接字当中的各种API进行网络通信</p>
+<p>主要用于制作长连接游戏（强联网游戏）</p>
+<h2 id="HTTP"><a href="#HTTP" class="headerlink" title="HTTP"></a>HTTP</h2><p><strong>Http&#x2F;Https：</strong>(安全的)超文本传输协议、是一个简单的请求-响应协议，它通常运行在TCP协议之上，它指定了客户端可能发送给服务端什么样的信息以及得到什么样的响应</p>
+<p>主要用于制作短连接游戏（弱联网游戏），也可以用来进行资源下载</p>
+<h2 id="FTP"><a href="#FTP" class="headerlink" title="FTP"></a>FTP</h2><p><strong>文件传输协议：</strong>是用于在网络上进行文件传输的一套标准协议，可以利用它来进行网络上资源的下载和上传，它也是基于TCP的传输，是面向连接的，为文件传输提供了可靠的保证</p>
+<p>笔记来源：【唐老狮】【ChatGPT】</p>
+<p><a target="_blank" rel="noopener" href="https://www.taikr.com/course/1378">https://www.taikr.com/course/1378</a></p>
+
+</div> 
+
+<script>
+    window.onload = detectors();
+</script>
+    <div class="post-footer">
+    <div class="h-line-primary"></div>
+    <nav class="post-nav">
+        <div class="prev-item">
+           
+                <div class="icon arrow-left"></div>
+                <div class="post-link">
+                    <a href="/2023/12/09/C-%E7%BD%91%E7%BB%9C%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80%EF%BC%88%E4%B8%83%EF%BC%89%E2%80%94%E2%80%94%E7%BD%91%E7%BB%9C%E6%B8%B8%E6%88%8F%E9%80%9A%E8%AE%AF%E6%96%B9%E6%A1%88/">Prev</a>
+                </div>
+            
+        </div>
+        <div class="next-item">
+            
+                <div class="icon arrow-right"></div>
+                <div class="post-link">
+                  <a href="/2023/12/09/C-%E7%BD%91%E7%BB%9C%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80%EF%BC%88%E4%BA%94%EF%BC%89%E2%80%94%E2%80%94%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE%E4%B9%8BTCP-IP%E5%8D%8F%E8%AE%AE/">Next</a>  
+                </div>  
+            
+        </div>
+    </nav>
+</div>
+
+    
+      <div class="post-comment">
+
+    
+        <div id="vcomments"></div>
+        <script>
+            var META = ['nick', 'mail', 'link'];
+            var meta = 'nick,mail';
+            meta = meta.split(',').filter(item => {
+                return META.includes(item);
+            });
+            new Valine({
+                el: '#vcomments',
+                appId: 'sfC3VuatNBTX6bDuHmAD9VS6-gzGzoHsz',
+                appKey: 'Cy84cmf4GSkRYuweZjOgapLJ',
+                lang: 'en',
+                placeholder: 'Say something',
+                avatar: 'mp',
+                meta: meta
+            })
+        </script>    
+     
+
+     
+    
+    
+
+</div>
+     
+  
+</article>
+        </div>
+      </div>
+      
+      <div class="footer">
+    <div class="flex-container">
+        <div class="footer-text">
+            
+            
+            
+                Powered by <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a> & <a target="_blank" rel="noopener" href="https://github.com/zoeingwingkei/frame/">Frame</a>
+                
+        </div>
+    </div>
+</div>
+
+    </div>
+
+    
+    
+
+  </body>
+</html>

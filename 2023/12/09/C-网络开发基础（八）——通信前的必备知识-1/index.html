@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="John Doe">
+
+
+
+
+
+
+
+<title>C#网络开发基础（八）——通信前的必备知识(2) | NEWDREAM</title>
+
+
+
+    <link rel="icon" href="/blog.ico">
+
+
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=Roboto+Mono&display=swap');
+</style>
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/frame.js"></script>
+    
+
+
+
+
+
+
+
+    <script src='https://unpkg.com/valine@1.4.16/dist/Valine.min.js'></script>
+
+
+
+
+  <meta name="generator" content="Hexo 6.3.0"></head>
+  <body>
+    <div class="mask-border">
+    </div>
+
+    <div class="wrapper">
+
+      <div class="header">
+  <div class="flex-container">
+    <div class="header-inner">
+      <div class="site-brand-container">
+        <a href="/">
+          
+            NewDream
+          
+        </a>
+      </div>
+      <div id="menu-btn" class="menu-btn" onclick="toggleMenu()">
+        Menu
+      </div>
+      <nav class="site-nav">
+        <ul class="menu-list">
+          
+            
+              <li class="menu-item">
+                <a href="/">Home</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/archives/">Archive</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/categories/gallery/">Gallery</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/tag/">Tag</a>
+              </li> 
+                   
+          
+          
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main">
+        <div class="flex-container">
+          <article id="post">
+
+  
+    <div class="post-head">
+    <div class="post-info">
+        <div class="tag-list">
+            
+                
+                    <span class="post-tag">
+                        <a href="/tags/C-%E7%BD%91%E7%BB%9C%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/">
+                            C#网络开发基础
+                        </a>
+                    </span>    
+                           
+            
+        </div>
+        <div class="post-title">
+            
+            
+                C#网络开发基础（八）——通信前的必备知识(2)
+            
+            
+        </div>
+        <span class="post-date">
+            Dec 9, 2023
+        </span>
+    </div>
+    <div class="post-img">
+        
+            <div class="h-line-primary"></div>
+              
+    </div>
+</div>
+    <div class="post-content">
+    <p>我们进行网络通信的目的是要传输数据，所以我们在正式学习网络通信之前，要先有二进制数据序列化和反序列化的知识储备</p>
+<p>这样才能在讲解网络通信时，轻松应对数据收发相关的需求</p>
+<h2 id="网络通信中传输的数据"><a href="#网络通信中传输的数据" class="headerlink" title="网络通信中传输的数据"></a>网络通信中传输的数据</h2><p>在网络通信中，我们把想要传递的类对象信息序列化为2进制数据（一般为byte字节数组）</p>
+<p>再将2进制数据通过网络传输给远端设备</p>
+<p>远端设备获取该2进制数据后再将其反序列化为对应的类对象</p>
+<p><img src="https://s2.loli.net/2023/12/09/LNrwWC7G5KFi2UR.png" alt="Untitled.png"></p>
+<h2 id="序列化和反序列化"><a href="#序列化和反序列化" class="headerlink" title="序列化和反序列化"></a>序列化和反序列化</h2><p>在网络通信中，<strong>对象的序列化是将对象转换为可保持或可传输的格式，而反序列化是将传输中的数据重新还原为对象。</strong>常见的序列化格式包括 JSON、XML、Protocol Buffers 等。序列化和反序列化是在客户端和服务器之间传输对象时常用的操作。</p>
+<h3 id="数据持久化2进制知识点："><a href="#数据持久化2进制知识点：" class="headerlink" title="数据持久化2进制知识点："></a>数据持久化2进制知识点：</h3><p>和网络通信相关的重要知识点<strong>（会在网络通信中频繁使用）</strong>：</p>
+<ol>
+<li><strong>BitConverter类</strong>：主要用于处理各类型和字节数组间的相互转换</li>
+<li><strong>Encoding类</strong>：主要用于处理字符串类型和字节数组间的相互转换</li>
+<li><strong>加密相关</strong>：了解2进制数据加密的常用手段和思路</li>
+</ol>
+<p>本地持久化知识点：</p>
+<ol>
+<li>File类：文件操作类，用于操作文件</li>
+<li>FileStream类：文件流类，以流的形式进行文件存储读取操作</li>
+<li>MemoryStrem：内存流对象</li>
+<li>BinaryFormatter：2进制格式化对象</li>
+</ol>
+<p>注意：</p>
+<p><strong><code>BinaryFormatter</code></strong> 类的确可以方便地将 C# 对象转换为字节数组，但由于其特有的格式，导致序列化的数据通常只能在相同的 .NET 环境中进行反序列化，而跨平台或跨语言兼容性相对较差。</p>
+<h2 id="什么是字符编码"><a href="#什么是字符编码" class="headerlink" title="什么是字符编码"></a>什么是字符编码</h2><p>字符编码（英语：Character encoding）也称字集码</p>
+<p>是把字符集中的字符，编码为指定集合中某一对象，以便文本在计算机中存储或通过网络进行传递</p>
+<p><strong>说人话：计算机里只能存数字（2机制），所以如果文字字符想要进行存储的话，就需要把对应的文字字符转换为数字才能进行处理，而字符编码就是文字字符在计算机中和数值的对应关系，是人为定义的一种映射规则。</strong></p>
+<p>比如：ASCII码（一种字符编码规则）中数值65用来映射字符A</p>
+<p>我们存储 A 这个字符，本质上存在内存中的是数值65对应的2进制是0100 0001</p>
+<p>大部分国家都针对自己国家语言指定的编码规则（因为语言文字的数量各不相同）</p>
+<p>ASCII码（美国）、GB2312编码（中国）、Shift_JIS编码（日本）、Euc-kr（韩国）等等</p>
+<h2 id="为何会出现乱码"><a href="#为何会出现乱码" class="headerlink" title="为何会出现乱码"></a>为何会出现乱码</h2><p>乱码通常指的是在文本显示或处理时，<strong>由于字符编码的不一致或错误导致的字符显示异常</strong>，无法正确识别和解释。我相信很多人在查看文本文件时，经常会看到如下图中的这种乱码。那么为什么会出现这样的乱码呢？</p>
+<p><img src="https://s2.loli.net/2023/12/09/T3uoYyROwpvk6Xc.png" alt="Untitled1.png"></p>
+<p>假设我们的一个文件是采用<strong>中国制定的GB2312编码进行编辑存储</strong>的，而此时我们并不使用GB2312这个编码规则去读取文件，而是采用其他的规则，比如<strong>日本指定的Shift_JIS编码读取该文件</strong>，那么由于编码的存和读不统一就会造成乱码的出现，因为不同的编码规则，字符和数值的映射关系是不同的。</p>
+<p>比如：130这个数值在法语编码中代表了<code>é</code>，在希伯来语编码中却代表了字母<code>Gimel</code> (<code>ג</code>)，在中文编码中又会代表另一个符号。</p>
+<h2 id="ASCII码"><a href="#ASCII码" class="headerlink" title="ASCII码"></a><strong><strong>ASCII码</strong></strong></h2><p>我们知道在计算机内部，所有的信息最终都是一个二进制值。</p>
+<p>一个二进制数就是一位（bit），有0和1两种状态。一个字节（byte）是8个二进制数组成的，所以1 byte &#x3D; 8 bit。</p>
+<p>也就是说一个字节一共可以用来表示256种不同的状态，从00000000到11111111。如果每一个状态都代表一个符号的话，那么一个字节可以用来表示256个符号</p>
+<p>上个世界60年代，美国制定了一套算是<strong>最早的字符编码</strong>，制定了一套基于英文字符与二进制位之间的对应关系。<strong>这套标准被称为ASCII码</strong>，一直使用到今天。</p>
+<p>ASCII码一共规定了128个字符的编码。比如：</p>
+<p>字符 A &#x3D; 65（十进制数）&#x3D; 0100 0001（二进制数）</p>
+<p>字符 1 &#x3D; 49（十进制数）&#x3D; 0011 0001（二进制数）等等</p>
+<p>下图为ASCII码的对照表</p>
+<p><img src="https://s2.loli.net/2023/12/09/flUsnMiLP516YFQ.png" alt="Untitled2.png"></p>
+<p>这128个字符的编码规则，只占用了一个字节的后面7位，最前面的一位统一规定为0。</p>
+<p>英文国家使用128个字符编码就足够了，但是如果用来表示其它国家的语言，128个符号是远远不够的，于是乎就出现了非ASCII码们。中国：没办法我就是这么的博大精深，后背发凉了吧</p>
+<h2 id="非ASCII码"><a href="#非ASCII码" class="headerlink" title="非ASCII码"></a><strong><strong>非ASCII码</strong></strong></h2><p>非ASCII码基本都是基于ASCII码进行的扩充，他们都保留了ASCII码0~127这段编码的规范。也就是说<strong>非ASCII码的前面部分往往是和ASCII码的规则是相同的。</strong></p>
+<p>对于一些欧洲国家，他们使用一个字节便可以表示完自己所有的文字，他们利用了字节中闲置的最高位编入新的符号，因为我们知道ASCII码的编码规则是：一个字节中的8位，只占用了一个字节的后面7位，最前面的一位统一规定为0。所以这些语言系统中文字较少的国家让最前面的一位可以为1，他们就可以为自己的文字在128~255这一段加入新的对应规则。</p>
+<p>比如：130这个数值在法语编码中代表了<code>é</code>，在希伯来语编码中却代表了字母<code>Gimel</code> (<code>ג</code>)</p>
+<p>这种一个字节就把字符表示完的做法只适用于语言系统中文字较少的国家，因为他们的语言的字母是有限的。</p>
+<p>对于使用象形文字的国家来说，一个字节完全不够用！比如中国，我们的汉字多达10万左右，一个字节最多也只能表示256种符号，是远远不够的。所以必须使用多个字节来表示一个符号。比如我们前面提到的中国的简体中文GB2312编码，是使用两个字节表示一个汉字，所以理论上来说可以表示256x256&#x3D;65536个符号。</p>
+<p>所以所谓的非ASCII码，<strong>就是指的除了ASCII码以外的编码格式</strong>，每个国家都至少有1种针对自己语言文字的编码格式，每一个编码格式中 数值和字符的对应关系都可能不相同。这也就造成了前面说到的乱码问题。在全世界范围内进行网络通信时，如果每个国家都使用不统一的编码格式，那么出现乱码的情况将随处可见。</p>
+<p>因此随着互联网的发展，人们决定要制定一套全世界统一的的编码规则，将世界上所有的符号都纳入其中，为每一个符号赋予独一无二的编码（2进制数值）。那么这样就不会出现乱码问题，影响信息的传递了。</p>
+<h2 id="Unicode"><a href="#Unicode" class="headerlink" title="Unicode"></a><strong><strong>Unicode</strong></strong></h2><p>Unicode可以理解为是 Unique Code 的简写，翻译过来是“唯一的编码”。</p>
+<p>它出现的主要原因就是用来解决乱码问题的，它将世界上所有的符号都纳入其中，每一个符号都为其分配一个独一无二的二进制数表示它，那么乱码问题就会消失。</p>
+<p>Unicode是一个很大的集合，现在的规模可以容纳100多万个符号，每个符号对应的二进制数都不一样。这样就确保了不同语言的字符不会再有冲突。</p>
+<p>那么这样可能就存在一个问题，就是有的符号用1个字节8位就可以表示了，有的符号可能需要使用2个字节16位甚至3个字节24位才能表示。就比如说ASCII码，它的存储规则就是一个字节存储一个字符，那么当我们使用Unicode编码时，到底用几个字节来存储字符呢？</p>
+<p>因此我们需要注意：Unicode编码只是一个符号集，它只规定符号和二进制的对应关系，<strong>并没有规定这个二进制数值应该如何存储。（并没有指定一个字节存储一个字符）主要是一个字符集，为每个字符分配了一个唯一的码点（code point），这个码点是一个抽象的概念，用来表示一个字符。</strong></p>
+<p><strong>存储的具体方式是由 Unicode 的编码方案决定的</strong>，而不是由 Unicode 字符集本身规定的。Unicode 字符集给出了每个字符的唯一标识，而 UTF-8、UTF-16、UTF-32 等编码方案则决定了如何将这些标识转化为实际的二进制数据。</p>
+<ul>
+<li><strong>UTF-8：</strong> UTF-8 是一种变长字符编码，使用1到4个字节表示一个字符。对于常用的 ASCII 字符，UTF-8 使用1个字节，而对于其他 Unicode 字符，使用不同长度的字节序列表示。</li>
+<li><strong>UTF-16：</strong> UTF-16 也是一种变长字符编码，使用2或4个字节表示一个字符。对于常用的 BMP（Basic Multilingual Plane，基本多文种平面）中的字符，UTF-16 使用2个字节，而对于超出 BMP 范围的字符，使用4个字节表示。</li>
+<li><strong>UTF-32：</strong> UTF-32 是一种定长字符编码，使用4个字节表示一个字符。每个 Unicode 码点直接对应一个32位整数。</li>
+</ul>
+<h2 id="总结："><a href="#总结：" class="headerlink" title="总结："></a>总结：</h2><p>虽然我们在开发中，只要保证存和读的编码格式一致就能避免乱码的出现，不过我还是建议大家，<strong>在进行文件存储、网络传输时，都采用UTF-8的编码格式，它相对其它格式来说在互联网通信中应用更广泛，更普遍，它包含各种语言符号。</strong></p>
+<p>笔记来源：【唐老狮】【ChatGPT】</p>
+<p><a target="_blank" rel="noopener" href="https://www.taikr.com/course/1378">https://www.taikr.com/course/1378</a></p>
+
+</div> 
+
+<script>
+    window.onload = detectors();
+</script>
+    <div class="post-footer">
+    <div class="h-line-primary"></div>
+    <nav class="post-nav">
+        <div class="prev-item">
+           
+        </div>
+        <div class="next-item">
+            
+                <div class="icon arrow-right"></div>
+                <div class="post-link">
+                  <a href="/2023/12/09/C-%E7%BD%91%E7%BB%9C%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80%EF%BC%88%E4%B8%83%EF%BC%89%E2%80%94%E2%80%94%E7%BD%91%E7%BB%9C%E6%B8%B8%E6%88%8F%E9%80%9A%E8%AE%AF%E6%96%B9%E6%A1%88/">Next</a>  
+                </div>  
+            
+        </div>
+    </nav>
+</div>
+
+    
+      <div class="post-comment">
+
+    
+        <div id="vcomments"></div>
+        <script>
+            var META = ['nick', 'mail', 'link'];
+            var meta = 'nick,mail';
+            meta = meta.split(',').filter(item => {
+                return META.includes(item);
+            });
+            new Valine({
+                el: '#vcomments',
+                appId: 'sfC3VuatNBTX6bDuHmAD9VS6-gzGzoHsz',
+                appKey: 'Cy84cmf4GSkRYuweZjOgapLJ',
+                lang: 'en',
+                placeholder: 'Say something',
+                avatar: 'mp',
+                meta: meta
+            })
+        </script>    
+     
+
+     
+    
+    
+
+</div>
+     
+  
+</article>
+        </div>
+      </div>
+      
+      <div class="footer">
+    <div class="flex-container">
+        <div class="footer-text">
+            
+            
+            
+                Powered by <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a> & <a target="_blank" rel="noopener" href="https://github.com/zoeingwingkei/frame/">Frame</a>
+                
+        </div>
+    </div>
+</div>
+
+    </div>
+
+    
+    
+
+  </body>
+</html>

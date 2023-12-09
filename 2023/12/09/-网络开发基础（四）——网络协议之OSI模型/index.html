@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="John Doe">
+
+
+
+
+
+
+
+<title>C#网络开发基础（四）——网络协议之TCP/IP协议 | NEWDREAM</title>
+
+
+
+    <link rel="icon" href="/blog.ico">
+
+
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=Roboto+Mono&display=swap');
+</style>
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/frame.js"></script>
+    
+
+
+
+
+
+
+
+    <script src='https://unpkg.com/valine@1.4.16/dist/Valine.min.js'></script>
+
+
+
+
+  <meta name="generator" content="Hexo 6.3.0"></head>
+  <body>
+    <div class="mask-border">
+    </div>
+
+    <div class="wrapper">
+
+      <div class="header">
+  <div class="flex-container">
+    <div class="header-inner">
+      <div class="site-brand-container">
+        <a href="/">
+          
+            NewDream
+          
+        </a>
+      </div>
+      <div id="menu-btn" class="menu-btn" onclick="toggleMenu()">
+        Menu
+      </div>
+      <nav class="site-nav">
+        <ul class="menu-list">
+          
+            
+              <li class="menu-item">
+                <a href="/">Home</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/archives/">Archive</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/categories/gallery/">Gallery</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/tag/">Tag</a>
+              </li> 
+                   
+          
+          
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main">
+        <div class="flex-container">
+          <article id="post">
+
+  
+    <div class="post-head">
+    <div class="post-info">
+        <div class="tag-list">
+            
+                
+                    <span class="post-tag">
+                        <a href="/tags/C-%E7%BD%91%E7%BB%9C%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/">
+                            C#网络开发基础
+                        </a>
+                    </span>    
+                           
+            
+        </div>
+        <div class="post-title">
+            
+            
+                C#网络开发基础（四）——网络协议之TCP/IP协议
+            
+            
+        </div>
+        <span class="post-date">
+            Dec 9, 2023
+        </span>
+    </div>
+    <div class="post-img">
+        
+            <div class="h-line-primary"></div>
+              
+    </div>
+</div>
+    <div class="post-content">
+    <h2 id="TCP-IP协议是什么"><a href="#TCP-IP协议是什么" class="headerlink" title="TCP&#x2F;IP协议是什么"></a>TCP&#x2F;IP协议是什么</h2><p>TCP&#x2F;IP（Transmission Control Protocol&#x2F;Internet Protocol）</p>
+<p>TCP&#x2F;IP传输协议，即传输控制&#x2F;网络协议，也叫作网络通讯协议</p>
+<p>是指能够在多个不同网络间实现信息传输的协议族，它是一个工业标准（就是实际会使用的标准）</p>
+<h3 id="TCP-IP协议族概述："><a href="#TCP-IP协议族概述：" class="headerlink" title="TCP&#x2F;IP协议族概述："></a><strong>TCP&#x2F;IP协议族概述：</strong></h3><ul>
+<li><strong>TCP&#x2F;IP模型：</strong> 与OSI模型类似，TCP&#x2F;IP协议族也有一个模型，<strong>但它是一个更简化的四层结构，包括网络接口层、网络层、传输层和应用层。</strong></li>
+<li><strong>协议集合：</strong> TCP&#x2F;IP协议族<strong>包含了一系列的协议（不仅仅指的是TCP和IP两个协议）</strong>，其中最为重要的是两个基本协议，即传输控制协议（TCP）和Internet协议（IP）。</li>
+</ul>
+<h3 id="TCP-IP协议的规则："><a href="#TCP-IP协议的规则：" class="headerlink" title="TCP&#x2F;IP协议的规则："></a><strong>TCP&#x2F;IP协议的规则：</strong></h3><p>通过对OSI七层模型的学习，我们知道实现网络传输的功能非常繁杂，所以采用了分而治之的设计方法，把网络的功能划分为不同的多个模块，以分层的形式有机地组合在了一起。</p>
+<p>TCP&#x2F;IP协议是在OSI模型的概念基础上发展而来，但是两者并非一一对应的关系。TCP&#x2F;IP协议不是OSI模型的具体实现，而是为了解决特定问题而设计的一组标准协议。在实际应用中，TCP&#x2F;IP协议族取代了OSI模型的影响，成为全球互联网通信的事实标准。</p>
+<p>与OSI模型类似，TCP&#x2F;IP协议族也有一个模型，但它是一个<strong>更简化的四层结构</strong>，包括（从低到高）：</p>
+<ol>
+<li><strong>网络接口层</strong><ul>
+<li><strong>功能：</strong> 这一层主要涉及物理硬件设备和设备驱动程序，负责将数据帧转换为比特流，并通过物理介质传输。</li>
+<li><strong>例子：</strong> 以太网、Wi-Fi、PPP（点对点协议）。</li>
+</ul>
+</li>
+<li><strong>网络层</strong><ul>
+<li><strong>功能：</strong> 网络层负责在网络中寻址和路由数据包，通过IP协议实现。它决定数据包如何从源地址传输到目标地址。</li>
+<li><strong>例子：</strong> Internet协议（IP）、Internet控制报文协议（ICMP）。</li>
+</ul>
+</li>
+<li><strong>传输层</strong><ul>
+<li><strong>功能：</strong> 传输层提供端到端的通信控制，确保数据的可靠性和完整性。它分为两个主要协议，TCP和UDP。</li>
+<li><strong>例子：</strong> 传输控制协议（TCP）、用户数据报协议（UDP）。</li>
+</ul>
+</li>
+<li><strong>应用层</strong><ul>
+<li><strong>功能：</strong> 应用层是最顶层的层次，直接为用户提供网络服务。它包含了各种应用协议，支持不同类型的应用程序通信。</li>
+<li><strong>例子：</strong> 超文本传输协议（HTTP）、文件传输协议（FTP）、简单邮件传输协议（SMTP）。</li>
+</ul>
+</li>
+</ol>
+<p><img src="https://s2.loli.net/2023/12/09/tYRoyrNLd5DiK4m.png" alt="TCP_IP协议模型和OSI模型对比图.png"></p>
+<p>我们不用把它想得太过抽象和复杂了，只需要记住</p>
+<p>想要进行网络通信，我们就遵循TCP&#x2F;IP协议的规则进行消息传递就行了，之后我们要学习的网络通信API都是基于TCP&#x2F;IP协议的封装，各种语言（C#、C++、Java、GO等等）都有对应的网络通信类对TCP&#x2F;IP协议进行了封装，我们只需要使用对应类和方法进行网络连接、网络通信就可以完成对应的功能。<strong>（深入了解还是要靠自己去查阅相关资料）</strong></p>
+<p>最后我们再像OSI模型一样模拟一下，发送和接受的过程，其实和OSI没什么不同，就是把OSI的七层浓缩优化成四层</p>
+<h3 id="发送方："><a href="#发送方：" class="headerlink" title="发送方："></a><strong>发送方：</strong></h3><ol>
+<li><strong>写邮件（应用层）：</strong><ul>
+<li>想象你正在写一封电子邮件。这是应用层的工作，你正在使用一个电子邮件应用程序。</li>
+</ul>
+</li>
+<li><strong>分割邮件（传输层）：</strong><ul>
+<li>你写的电子邮件可能很长，传输层负责将它分成小块，以便更容易在网络上传输。</li>
+</ul>
+</li>
+<li><strong>添加地址（网络层）：</strong><ul>
+<li>现在，系统在每个邮件块上加上地址，就像在信封上写上邮寄地址一样，这是网络层的工作。</li>
+</ul>
+</li>
+<li><strong>加入物理地址（网络接口层）：</strong><ul>
+<li>邮件块被传递到网络接口层，这里给每个块加上物理地址，就像在信封上写上详细地址一样。</li>
+</ul>
+</li>
+<li><strong>传输数据（物理层）：</strong><ul>
+<li>最后，系统将邮件块转换为电子信号或者光信号，并通过物理层的网络介质（比如Wi-Fi或以太网）发送出去，就像把信封通过邮寄服务送到目的地一样。</li>
+</ul>
+</li>
+</ol>
+<h3 id="接收方："><a href="#接收方：" class="headerlink" title="接收方："></a><strong>接收方：</strong></h3><ol>
+<li><strong>接收信号（物理层）：</strong><ul>
+<li>在接收端，物理层接收到电子信号或者光信号，并将它转换回邮件块。</li>
+</ul>
+</li>
+<li><strong>检查地址（网络接口层）：</strong><ul>
+<li>现在，网络接口层检查物理地址，确保这封邮件块是发给这个设备的。</li>
+</ul>
+</li>
+<li><strong>寻找路径（网络层）：</strong><ul>
+<li>网络层检查网络地址，确保邮件块通过正确的路径到达目的地。</li>
+</ul>
+</li>
+<li><strong>组装邮件（传输层）：</strong><ul>
+<li>接收端的传输层负责将所有的邮件块组装在一起，确保它们按照正确的顺序。</li>
+</ul>
+</li>
+<li><strong>显示邮件（应用层）：</strong><ul>
+<li>最后，邮件块被传递到应用层，你的电子邮件应用程序负责将它们显示在你的收件箱中。</li>
+</ul>
+</li>
+</ol>
+<p>笔记来源：【唐老狮】【ChatGPT】</p>
+<p><a target="_blank" rel="noopener" href="https://www.taikr.com/course/1378">https://www.taikr.com/course/1378</a></p>
+
+</div> 
+
+<script>
+    window.onload = detectors();
+</script>
+    <div class="post-footer">
+    <div class="h-line-primary"></div>
+    <nav class="post-nav">
+        <div class="prev-item">
+           
+                <div class="icon arrow-left"></div>
+                <div class="post-link">
+                    <a href="/2023/12/09/C-%E7%BD%91%E7%BB%9C%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80%EF%BC%88%E4%BA%94%EF%BC%89%E2%80%94%E2%80%94%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE%E4%B9%8BTCP-IP%E5%8D%8F%E8%AE%AE/">Prev</a>
+                </div>
+            
+        </div>
+        <div class="next-item">
+            
+                <div class="icon arrow-right"></div>
+                <div class="post-link">
+                  <a href="/2023/12/02/Untitled/">Next</a>  
+                </div>  
+            
+        </div>
+    </nav>
+</div>
+
+    
+      <div class="post-comment">
+
+    
+        <div id="vcomments"></div>
+        <script>
+            var META = ['nick', 'mail', 'link'];
+            var meta = 'nick,mail';
+            meta = meta.split(',').filter(item => {
+                return META.includes(item);
+            });
+            new Valine({
+                el: '#vcomments',
+                appId: 'sfC3VuatNBTX6bDuHmAD9VS6-gzGzoHsz',
+                appKey: 'Cy84cmf4GSkRYuweZjOgapLJ',
+                lang: 'en',
+                placeholder: 'Say something',
+                avatar: 'mp',
+                meta: meta
+            })
+        </script>    
+     
+
+     
+    
+    
+
+</div>
+     
+  
+</article>
+        </div>
+      </div>
+      
+      <div class="footer">
+    <div class="flex-container">
+        <div class="footer-text">
+            
+            
+            
+                Powered by <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a> & <a target="_blank" rel="noopener" href="https://github.com/zoeingwingkei/frame/">Frame</a>
+                
+        </div>
+    </div>
+</div>
+
+    </div>
+
+    
+    
+
+  </body>
+</html>
