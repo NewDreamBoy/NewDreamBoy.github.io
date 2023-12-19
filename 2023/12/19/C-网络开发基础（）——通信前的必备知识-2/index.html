@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="John Doe">
+
+
+
+
+
+
+
+<title>C#网络开发基础（九）—— 序列化和反序列化 | NEWDREAM</title>
+
+
+
+    <link rel="icon" href="/blog.ico">
+
+
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=Roboto+Mono&display=swap');
+</style>
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/frame.js"></script>
+    
+
+
+
+
+
+
+
+    <script src='https://unpkg.com/valine@1.4.16/dist/Valine.min.js'></script>
+
+
+
+
+  <meta name="generator" content="Hexo 6.3.0"></head>
+  <body>
+    <div class="mask-border">
+    </div>
+
+    <div class="wrapper">
+
+      <div class="header">
+  <div class="flex-container">
+    <div class="header-inner">
+      <div class="site-brand-container">
+        <a href="/">
+          
+            NewDream
+          
+        </a>
+      </div>
+      <div id="menu-btn" class="menu-btn" onclick="toggleMenu()">
+        Menu
+      </div>
+      <nav class="site-nav">
+        <ul class="menu-list">
+          
+            
+              <li class="menu-item">
+                <a href="/">Home</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/archives/">Archive</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/categories/gallery/">Gallery</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/tag/">Tag</a>
+              </li> 
+                   
+          
+          
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main">
+        <div class="flex-container">
+          <article id="post">
+
+  
+    <div class="post-head">
+    <div class="post-info">
+        <div class="tag-list">
+            
+                
+                    <span class="post-tag">
+                        <a href="/tags/C-%E7%BD%91%E7%BB%9C%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/">
+                            C#网络开发基础
+                        </a>
+                    </span>    
+                           
+            
+        </div>
+        <div class="post-title">
+            
+            
+                C#网络开发基础（九）—— 序列化和反序列化
+            
+            
+        </div>
+        <span class="post-date">
+            Dec 19, 2023
+        </span>
+    </div>
+    <div class="post-img">
+        
+            <div class="h-line-primary"></div>
+              
+    </div>
+</div>
+    <div class="post-content">
+    <h2 id="何为序列化，反序列化"><a href="#何为序列化，反序列化" class="headerlink" title="何为序列化，反序列化"></a>何为序列化，反序列化</h2><p>在计算机世界中，序列化就好比把一个复杂的数据结构（比如一个对象）拆分成可以在网络上传输或者保存到文件的一系列字节，反序列化就好比把收到的一系列字节重新组合成原始的数据结构。</p>
+<p>在网络通信中，数据序列化（Serialization）和反序列化（Deserialization）是两个重要的过程，它们的目的是在不同系统或者编程语言之间传递数据时，将数据转换为可传输的格式（字节），以及在接收端重新恢复成原始数据结构。</p>
+<p>无论是用那种数据格式（json、XML、Protobuf）最终都会转化为字节（byte）流进行传输。在网络通信中，数据往往以二进制形式在传输介质上进行传递，而字节流是最基本的数据单位。</p>
+<p>序列化的过程实际上就是将数据结构转化为字节流的过程，而反序列化则是将接收到的字节流还原为原始的数据结构。这种字节流的传输形式是通用的，不受具体序列化格式的限制。在底层，无论你使用的是JSON、XML、Protobuf，最终都会将数据表示为一系列的字节，以便在网络上传输。</p>
+<h2 id="非字符串类型转字节数组"><a href="#非字符串类型转字节数组" class="headerlink" title="非字符串类型转字节数组"></a>非字符串类型转字节数组</h2><p>当我们需要将非字符串类型转成字节数组的话，可以使用**<code>BitConverter</code>** 类，**<code>BitConverter</code>** 类是 .NET 中用于将基本数据类型（如整数、浮点数等）转换为字节数组，或将字节数组转换为基本数据类型的类。</p>
+<p>用法比较简单，就是传入一个变量，返回这个变量的字节数组</p>
+<p><img src="https://s2.loli.net/2023/12/19/JRNToPi89WUsaj1.png" alt="image.png"></p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Byte[] bytes1 =  BitConverter.GetBytes(<span class="literal">true</span>);</span><br><span class="line">Byte[] bytes2 =  BitConverter.GetBytes(<span class="number">111</span>);</span><br><span class="line">Byte[] bytes3 = BitConverter.GetBytes(<span class="number">1.5</span>);</span><br></pre></td></tr></table></figure>
+
+<h2 id="字符串类型转字节数组"><a href="#字符串类型转字节数组" class="headerlink" title="字符串类型转字节数组"></a>字符串类型转字节数组</h2><p><strong><code>BitConverter</code></strong> 类，不支持字符串的转换，因为字符串是一个复杂的数据类型，包含多个字符，而不是像整数或浮点数那样可以简单地转换为一系列字节。</p>
+<p>如果你想将字符串转换为字节数组，可以使用 <strong><code>Encoding</code></strong> 类的 <strong><code>GetBytes</code></strong> 方法。这样可以将字符串转换为字节数组，然后再通过网络传输或进行其他操作。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">byte</span>[] byte2 = Encoding.UTF8.GetBytes(<span class="string">&quot;字符串就应该用Encoding!&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<h2 id="将一个类对象转换为二进制"><a href="#将一个类对象转换为二进制" class="headerlink" title="将一个类对象转换为二进制"></a>将一个类对象转换为二进制</h2><p>注意，网络通讯中我们不用直接使用<code>BinaryFormatter</code>二进制格式化类，因为客户端和服务器使用的语言可能不一样，BinaryFormatter是C#的序列化规则，和其它语言之间的兼容性不好如果使用它，那么其它语言开发的服务器无法对其进行反序列化，我们需要自己来处理将类对象数据序列化为字节数组。</p>
+<p>来一个PlayerInfo类来演示，如果将一个类对象转换成二进制</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">PlayerInfo</span></span><br><span class="line">&#123;</span><br><span class="line">		<span class="comment">//注意变量对应的变量类型</span></span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">int</span> lev;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">string</span> name;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">short</span> atk;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">bool</span> sex;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">PlayerInfo playerInfo = <span class="keyword">new</span> PlayerInfo();</span><br><span class="line">            playerInfo.lev = <span class="number">10</span>;</span><br><span class="line">            playerInfo.name = <span class="string">&quot;MyName&quot;</span>;</span><br><span class="line">            playerInfo.atk = <span class="number">15</span>;</span><br><span class="line">            playerInfo.sex = <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//将一个类对象携带的所有信息放入到一个字节数组中</span></span><br><span class="line"><span class="comment">//①首先需要得到这个字节数组的长度</span></span><br><span class="line"><span class="built_in">int</span> bytesLenght = <span class="keyword">sizeof</span>(<span class="built_in">int</span>) +   <span class="comment">//lev是int类型，对应4个字节</span></span><br><span class="line">                  <span class="keyword">sizeof</span>(<span class="built_in">int</span>) +   <span class="comment">//用一个int类型存playerInfo.name的字符串长度</span></span><br><span class="line">                  Encoding.UTF8.GetBytes(playerInfo.name).Length + <span class="comment">//字符串具体字节数组的长度</span></span><br><span class="line">                  <span class="keyword">sizeof</span>(<span class="built_in">short</span>) + <span class="comment">//hp是一个short类型 对应2个字节</span></span><br><span class="line">                  <span class="keyword">sizeof</span>(<span class="built_in">bool</span>);   <span class="comment">//sex是一个bool类型 对应1个字节</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//②创建一个字节数组</span></span><br><span class="line">Byte[] bytes = <span class="keyword">new</span> Byte[bytesLenght];</span><br></pre></td></tr></table></figure>
+
+<p>这里有一个比较疑惑的地方，一开始我也没看懂，就是为什么不直接<code>Encoding.UTF8.GetBytes(playerInfo.name).Length</code>，还要在前面加一个<code>sizeof(int)</code> </p>
+<p>虽然我在注释上写到了“用一个int类型存playerInfo.name的字符串长度”，我怕到时回头看，人又懵逼了，所以这里做个解释：</p>
+<p>其他类型我们都能知道他占几个字节，读的时候使用对应的方法读即可，例如int4个字节，我们就使用<code>BitConverter.ToInt32(字节数组,开始索引);</code> short的话是2个字节，使用<code>BitConverter.ToInt16(字节数组,开始索引);</code> 现在问题来了，我们int和short或者其他非字符串类型，都是固定的字节数，使用ToInt32的时候，要传入一个开始索引，因为明确知道int是占4字节，系统就会从开始索引处读4字节，ToInt16同理，但是String类型是可变的，并固定，所以我们需要在字节数组中添加**<code>sizeof(int)</code>**以存储字符串长度的原因是为了在稍后从字节数组中读取数据时能够确定字符串的长度。这是一种常见的序列化方法。</p>
+<p>简单点说就是：</p>
+<p>对于固定大小的数据类型（如int、short等），我们可以直接通过指定的字节数读取数据，而对于可变长度的数据类型（如字符串），我们需要在序列化时存储额外的信息，以便在反序列化时正确地解析数据。对于可变长度的字符串，通过在字节数组中添加字符串长度信息（使用**<code>sizeof(int)</code>**来存储长度），我们在反序列化时就能够知道字符串的实际长度，从而正确地提取字符串数据。这种方法确保了在读取数据时能够准确地区分不同部分的字节，以正确还原对象。</p>
+<p>如果还不明白的话，看完反序列化然后自己打断点思考一下应该就能理解了。</p>
+<p>开始序列化</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//③开始逐个序列化</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//索引</span></span><br><span class="line"><span class="built_in">int</span> index = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//序列化lev</span></span><br><span class="line">BitConverter.GetBytes(playerInfo.lev).CopyTo(bytes, index);</span><br><span class="line">index += <span class="keyword">sizeof</span>(<span class="built_in">int</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//序列化name</span></span><br><span class="line"><span class="comment">//先存长度</span></span><br><span class="line"><span class="built_in">int</span> strLength =  playerInfo.name.Length;</span><br><span class="line">BitConverter.GetBytes(strLength).CopyTo(bytes, index);</span><br><span class="line">index += <span class="keyword">sizeof</span>(<span class="built_in">int</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//再存实际内容</span></span><br><span class="line">Encoding.UTF8.GetBytes(playerInfo.name).CopyTo(bytes, index);</span><br><span class="line">index += strLength;</span><br><span class="line"></span><br><span class="line"><span class="comment">//序列化atk</span></span><br><span class="line">BitConverter.GetBytes(playerInfo.atk).CopyTo(bytes, index);</span><br><span class="line">index += <span class="keyword">sizeof</span>(<span class="built_in">short</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//序列化sex</span></span><br><span class="line">BitConverter.GetBytes(playerInfo.sex).CopyTo(bytes, index);</span><br><span class="line">index += <span class="keyword">sizeof</span>(<span class="built_in">bool</span>);</span><br></pre></td></tr></table></figure>
+
+<p>可以打断点，看看bytes里面都有什么内容。</p>
+<p>序列化的时候也简单</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">PlayerInfo playerInfo2 = <span class="keyword">new</span> PlayerInfo();</span><br><span class="line"><span class="built_in">int</span> index2 = <span class="number">0</span>;</span><br><span class="line">playerInfo2.lev =  BitConverter.ToInt32(bytes, index2);</span><br><span class="line">index2 += <span class="keyword">sizeof</span>(<span class="built_in">int</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">int</span> strLength2 = BitConverter.ToInt32(bytes, index2);</span><br><span class="line">index2 += <span class="keyword">sizeof</span>(<span class="built_in">int</span>);</span><br><span class="line">playerInfo2.name =  Encoding.UTF8.GetString(bytes, index2, strLength2);</span><br><span class="line">index2 += strLength2;</span><br><span class="line"></span><br><span class="line">playerInfo2.atk = BitConverter.ToInt16(bytes, index2);</span><br><span class="line">index2 += <span class="keyword">sizeof</span>(<span class="built_in">short</span>);</span><br><span class="line"></span><br><span class="line">playerInfo2.sex = BitConverter.ToBoolean(bytes, index2);</span><br><span class="line">index2 += <span class="keyword">sizeof</span>(<span class="built_in">bool</span>);</span><br><span class="line"></span><br><span class="line">Console.WriteLine(playerInfo2.lev);</span><br><span class="line">Console.WriteLine(playerInfo2.name);</span><br><span class="line">Console.WriteLine(playerInfo2.atk);</span><br><span class="line">Console.WriteLine(playerInfo2.sex);</span><br></pre></td></tr></table></figure>
+
+<p>运行查看，反序列化是否成功</p>
+<p><img src="https://s2.loli.net/2023/12/19/BjFbDK1zphgQfWR.png" alt="image1.png"></p>
+<p>上面的项目，主要是为了演示一下如何将数据的2进制序列化，正式项目中可能不会这么傻，用这种方式，一般可能不用自己造轮子用一下框架或者其他玩意，但是我们也可以自己做个小的练习，把上面的代码封装拓展一下，上面的代码写的比较死，换了类就不适用了，在类中再定义一个自定义类也不适用。所以我们改一下</p>
+<p><code>BaseData</code> 把序列化和反序列化封装一下，要进行2进制序列化的类需要继承<code>BaseData</code>并实现它的抽象方法</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> System;</span><br><span class="line"><span class="keyword">using</span> System.Text;</span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> 网络开发基础.序列化和反序列化.练习题</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title">BaseData</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="built_in">int</span> <span class="title">GetBytesNum</span>()</span>;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="built_in">byte</span>[] <span class="title">Writing</span>()</span>;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="built_in">int</span> <span class="title">Reading</span>(<span class="params">Byte[] bytes, <span class="built_in">int</span> beginIndex = <span class="number">0</span></span>)</span>;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">WriteData</span>&lt;<span class="title">T</span>&gt;(<span class="params">Byte[] bytes, T data, <span class="keyword">ref</span> <span class="built_in">int</span> index</span>)</span></span><br><span class="line">        &#123;</span><br><span class="line">						<span class="keyword">try</span></span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">switch</span> (data)</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="keyword">case</span> <span class="built_in">int</span> intValue:</span><br><span class="line">                        BitConverter.GetBytes(intValue).CopyTo(bytes, index);</span><br><span class="line">                        index += <span class="keyword">sizeof</span>(<span class="built_in">int</span>);</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">case</span> <span class="built_in">short</span> shortValue:</span><br><span class="line">                        BitConverter.GetBytes(shortValue).CopyTo(bytes, index);</span><br><span class="line">                        index += <span class="keyword">sizeof</span>(<span class="built_in">short</span>);</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">case</span> <span class="built_in">bool</span> boolValue:</span><br><span class="line">                        BitConverter.GetBytes(boolValue).CopyTo(bytes, index);</span><br><span class="line">                        index += <span class="keyword">sizeof</span>(<span class="built_in">bool</span>);</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">case</span> <span class="built_in">string</span> stringValue:</span><br><span class="line">                        <span class="comment">//先获取字节数组</span></span><br><span class="line">                        <span class="built_in">byte</span>[] strBytes = Encoding.UTF8.GetBytes(stringValue);</span><br><span class="line">                        <span class="comment">//先存储字节数组的长度</span></span><br><span class="line">                        WriteData&lt;<span class="built_in">int</span>&gt;(bytes, strBytes.Length, <span class="keyword">ref</span> index);</span><br><span class="line">                        strBytes.CopyTo(bytes, index);</span><br><span class="line">                        index += strBytes.Length;</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">case</span> BaseData baseDataValue:</span><br><span class="line">                        baseDataValue.Writing().CopyTo(bytes, index);</span><br><span class="line">                        index += baseDataValue.GetBytesNum();</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line">                    <span class="literal">default</span>:</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">catch</span> (Exception ex)</span><br><span class="line">            &#123;</span><br><span class="line">                Console.WriteLine(ex.Message);</span><br><span class="line">                <span class="keyword">throw</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">protected</span> T <span class="title">ReadBasicData</span>&lt;<span class="title">T</span>&gt;(<span class="params">Byte[] bytes, <span class="keyword">ref</span> <span class="built_in">int</span> index</span>) <span class="keyword">where</span> T : BaseData, <span class="keyword">new</span>()</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="keyword">typeof</span>(T).IsSubclassOf(<span class="keyword">typeof</span>(BaseData)) || <span class="keyword">typeof</span>(T) == <span class="keyword">typeof</span>(BaseData))</span><br><span class="line">            &#123;</span><br><span class="line">                T <span class="keyword">value</span> = <span class="keyword">new</span> T();</span><br><span class="line">                index += <span class="keyword">value</span>.Reading(bytes, index);</span><br><span class="line">                <span class="keyword">return</span> (T)(<span class="built_in">object</span>)<span class="keyword">value</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> (T)(<span class="built_in">object</span>)<span class="literal">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">protected</span> T <span class="title">ReadData</span>&lt;<span class="title">T</span>&gt;(<span class="params">Byte[] bytes, <span class="keyword">ref</span> <span class="built_in">int</span> index</span>)</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">try</span></span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">if</span> (<span class="keyword">typeof</span>(T) == <span class="keyword">typeof</span>(<span class="built_in">int</span>))</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="built_in">int</span> <span class="keyword">value</span> = BitConverter.ToInt32(bytes, index);</span><br><span class="line">                    index += <span class="keyword">sizeof</span>(<span class="built_in">int</span>);</span><br><span class="line">                    <span class="keyword">return</span> (T)(<span class="built_in">object</span>)<span class="keyword">value</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">typeof</span>(T) == <span class="keyword">typeof</span>(<span class="built_in">short</span>))</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="built_in">short</span> <span class="keyword">value</span> = BitConverter.ToInt16(bytes, index);</span><br><span class="line">                    index += <span class="keyword">sizeof</span>(<span class="built_in">short</span>);</span><br><span class="line">                    <span class="keyword">return</span> (T)(<span class="built_in">object</span>)<span class="keyword">value</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">typeof</span>(T) == <span class="keyword">typeof</span>(<span class="built_in">bool</span>))</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="built_in">bool</span> <span class="keyword">value</span> = BitConverter.ToBoolean(bytes, index);</span><br><span class="line">                    index += <span class="keyword">sizeof</span>(<span class="built_in">bool</span>);</span><br><span class="line">                    <span class="keyword">return</span> (T)(<span class="built_in">object</span>)<span class="keyword">value</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">typeof</span>(T) == <span class="keyword">typeof</span>(<span class="built_in">string</span>))</span><br><span class="line">                &#123;</span><br><span class="line">			              <span class="comment">//先读取长度</span></span><br><span class="line">                    <span class="built_in">int</span> lenght = ReadData&lt;<span class="built_in">int</span>&gt;(bytes, <span class="keyword">ref</span> index);</span><br><span class="line">                    <span class="built_in">string</span> <span class="keyword">value</span> = Encoding.UTF8.GetString(bytes, index, lenght);</span><br><span class="line">                    index += lenght;</span><br><span class="line">                    <span class="keyword">return</span> (T)(<span class="built_in">object</span>)<span class="keyword">value</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">return</span> (T)(<span class="built_in">object</span>)<span class="literal">null</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">catch</span> (Exception ex)</span><br><span class="line">            &#123;</span><br><span class="line">                Console.WriteLine(ex.Message);</span><br><span class="line">                <span class="keyword">throw</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>两个自定义类<code>Player</code> 和<code>TestInfo</code> </p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> System;</span><br><span class="line"><span class="keyword">using</span> System.Text;</span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> 网络开发基础.序列化和反序列化.练习题</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Player</span> : <span class="title">BaseData</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">public</span> <span class="built_in">int</span> atk;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">override</span> <span class="built_in">int</span> <span class="title">GetBytesNum</span>()</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">sizeof</span>(<span class="built_in">int</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">override</span> <span class="built_in">byte</span>[] <span class="title">Writing</span>()</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">int</span> index = <span class="number">0</span>;</span><br><span class="line">            Byte[] bytes = <span class="keyword">new</span> <span class="built_in">byte</span>[GetBytesNum()];</span><br><span class="line">            WriteData&lt;<span class="built_in">int</span>&gt;(bytes, atk, <span class="keyword">ref</span> index);</span><br><span class="line">            <span class="keyword">return</span> bytes;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">override</span> <span class="built_in">int</span> <span class="title">Reading</span>(<span class="params"><span class="built_in">byte</span>[] bytes, <span class="built_in">int</span> beginIndex = <span class="number">0</span></span>)</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">int</span> index = beginIndex;</span><br><span class="line">            atk = ReadData&lt;<span class="built_in">int</span>&gt;(bytes, <span class="keyword">ref</span> index); </span><br><span class="line">            <span class="keyword">return</span> index - beginIndex;             </span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">class</span> <span class="title">TestInfo</span> : <span class="title">BaseData</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">public</span> <span class="built_in">short</span> lev;</span><br><span class="line">        <span class="keyword">public</span> Player p;</span><br><span class="line">        <span class="keyword">public</span> <span class="built_in">int</span> hp;</span><br><span class="line">        <span class="keyword">public</span> <span class="built_in">string</span> name;</span><br><span class="line">        <span class="keyword">public</span> <span class="built_in">bool</span> sex;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">override</span> <span class="built_in">int</span> <span class="title">GetBytesNum</span>()</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">int</span> length = <span class="keyword">sizeof</span>(<span class="built_in">short</span>) +</span><br><span class="line">                        p.GetBytesNum() +</span><br><span class="line">                        <span class="keyword">sizeof</span>(<span class="built_in">int</span>) +</span><br><span class="line">                        <span class="keyword">sizeof</span>(<span class="built_in">int</span>) +</span><br><span class="line">                        Encoding.UTF8.GetBytes(name).Length +</span><br><span class="line">                        <span class="keyword">sizeof</span>(<span class="built_in">bool</span>);</span><br><span class="line">            <span class="keyword">return</span> length;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">override</span> <span class="built_in">int</span> <span class="title">Reading</span>(<span class="params"><span class="built_in">byte</span>[] bytes, <span class="built_in">int</span> beginIndex = <span class="number">0</span></span>)</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">int</span> index = beginIndex;</span><br><span class="line">            lev = ReadData&lt;<span class="built_in">short</span>&gt;(bytes, <span class="keyword">ref</span> index); </span><br><span class="line">            p = ReadBasicData&lt;Player&gt;(bytes, <span class="keyword">ref</span> index);</span><br><span class="line">            hp = ReadData&lt;<span class="built_in">int</span>&gt;(bytes, <span class="keyword">ref</span> index);</span><br><span class="line">            name = ReadData&lt;<span class="built_in">string</span>&gt;(bytes, <span class="keyword">ref</span> index);</span><br><span class="line">            sex = ReadData&lt;<span class="built_in">bool</span>&gt;(bytes, <span class="keyword">ref</span> index);</span><br><span class="line">            <span class="keyword">return</span> index;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">override</span> <span class="built_in">byte</span>[] <span class="title">Writing</span>()</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">int</span> index = <span class="number">0</span>;</span><br><span class="line">            Byte[] bytes = <span class="keyword">new</span> <span class="built_in">byte</span>[GetBytesNum()];</span><br><span class="line">            WriteData&lt;<span class="built_in">short</span>&gt;(bytes, lev, <span class="keyword">ref</span> index);</span><br><span class="line">            WriteData&lt;BaseData&gt;(bytes, p, <span class="keyword">ref</span> index);</span><br><span class="line">            WriteData&lt;<span class="built_in">int</span>&gt;(bytes, hp, <span class="keyword">ref</span> index);</span><br><span class="line">            WriteData&lt;<span class="built_in">string</span>&gt;(bytes, name, <span class="keyword">ref</span> index);</span><br><span class="line">            WriteData&lt;<span class="built_in">bool</span>&gt;(bytes, sex, <span class="keyword">ref</span> index);</span><br><span class="line">            <span class="keyword">return</span> bytes;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>Main</code> 启动文件</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> System;</span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> 网络开发基础.序列化和反序列化.练习题</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">class</span> <span class="title">PlayerInfo</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">public</span> <span class="built_in">int</span> lev;</span><br><span class="line">        <span class="keyword">public</span> <span class="built_in">string</span> name;</span><br><span class="line">        <span class="keyword">public</span> <span class="built_in">short</span> atk;</span><br><span class="line">        <span class="keyword">public</span> <span class="built_in">bool</span> sex;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Start</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>(<span class="params"><span class="built_in">string</span>[] args</span>)</span></span><br><span class="line">        &#123;</span><br><span class="line">            TestInfo testInfo = <span class="keyword">new</span> TestInfo();</span><br><span class="line">            testInfo.lev = <span class="number">10</span>;</span><br><span class="line">            testInfo.p = <span class="keyword">new</span> Player();</span><br><span class="line">            testInfo.p.atk = <span class="number">10</span>;</span><br><span class="line">            testInfo.hp = <span class="number">15</span>;</span><br><span class="line">            testInfo.name = <span class="string">&quot;NewDream&quot;</span>;</span><br><span class="line">            testInfo.sex = <span class="literal">false</span>;</span><br><span class="line">            <span class="built_in">byte</span>[] bytesData = testInfo.Writing();</span><br><span class="line"></span><br><span class="line">            TestInfo testInfo2 = <span class="keyword">new</span> TestInfo();</span><br><span class="line">            testInfo2.Reading(bytesData);</span><br><span class="line">            Console.WriteLine(testInfo2.lev);</span><br><span class="line">            Console.WriteLine(testInfo2.p.atk);</span><br><span class="line">            Console.WriteLine(testInfo2.hp);</span><br><span class="line">            Console.WriteLine(testInfo2.name);</span><br><span class="line">            Console.WriteLine(testInfo2.sex);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里就不做解释了，这个做练习目的，主要还是了解前面的内容即可。不过前面的内容玩明白了，后面这个地方应该也不难理解。</p>
+<p>笔记来源：【唐老狮】【ChatGPT】</p>
+<p><a target="_blank" rel="noopener" href="https://www.taikr.com/course/1378">https://www.taikr.com/course/1378</a></p>
+
+</div> 
+
+<script>
+    window.onload = detectors();
+</script>
+    <div class="post-footer">
+    <div class="h-line-primary"></div>
+    <nav class="post-nav">
+        <div class="prev-item">
+           
+                <div class="icon arrow-left"></div>
+                <div class="post-link">
+                    <a href="/2023/12/19/C-%E7%BD%91%E7%BB%9C%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80%EF%BC%88%E5%8D%81%EF%BC%89%E2%80%94%E2%80%94%E5%BA%8F%E5%88%97%E5%8C%96%E5%92%8C%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/">Prev</a>
+                </div>
+            
+        </div>
+        <div class="next-item">
+            
+                <div class="icon arrow-right"></div>
+                <div class="post-link">
+                  <a href="/2023/12/09/C-%E7%BD%91%E7%BB%9C%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80%EF%BC%88%E5%85%AB%EF%BC%89%E2%80%94%E2%80%94%E9%80%9A%E4%BF%A1%E5%89%8D%E7%9A%84%E5%BF%85%E5%A4%87%E7%9F%A5%E8%AF%86-1/">Next</a>  
+                </div>  
+            
+        </div>
+    </nav>
+</div>
+
+    
+      <div class="post-comment">
+
+    
+        <div id="vcomments"></div>
+        <script>
+            var META = ['nick', 'mail', 'link'];
+            var meta = 'nick,mail';
+            meta = meta.split(',').filter(item => {
+                return META.includes(item);
+            });
+            new Valine({
+                el: '#vcomments',
+                appId: 'sfC3VuatNBTX6bDuHmAD9VS6-gzGzoHsz',
+                appKey: 'Cy84cmf4GSkRYuweZjOgapLJ',
+                lang: 'en',
+                placeholder: 'Say something',
+                avatar: 'mp',
+                meta: meta
+            })
+        </script>    
+     
+
+     
+    
+    
+
+</div>
+     
+  
+</article>
+        </div>
+      </div>
+      
+      <div class="footer">
+    <div class="flex-container">
+        <div class="footer-text">
+            
+            
+            
+                Powered by <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a> & <a target="_blank" rel="noopener" href="https://github.com/zoeingwingkei/frame/">Frame</a>
+                
+        </div>
+    </div>
+</div>
+
+    </div>
+
+    
+    
+
+  </body>
+</html>

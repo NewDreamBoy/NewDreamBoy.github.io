@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="John Doe">
+
+
+
+
+
+
+
+<title>C#网络开发基础（十一）—— 简单的实现同步TCP通信【客户端】和【服务器】 | NEWDREAM</title>
+
+
+
+    <link rel="icon" href="/blog.ico">
+
+
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=Roboto+Mono&display=swap');
+</style>
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/frame.js"></script>
+    
+
+
+
+
+
+
+
+    <script src='https://unpkg.com/valine@1.4.16/dist/Valine.min.js'></script>
+
+
+
+
+  <meta name="generator" content="Hexo 6.3.0"></head>
+  <body>
+    <div class="mask-border">
+    </div>
+
+    <div class="wrapper">
+
+      <div class="header">
+  <div class="flex-container">
+    <div class="header-inner">
+      <div class="site-brand-container">
+        <a href="/">
+          
+            NewDream
+          
+        </a>
+      </div>
+      <div id="menu-btn" class="menu-btn" onclick="toggleMenu()">
+        Menu
+      </div>
+      <nav class="site-nav">
+        <ul class="menu-list">
+          
+            
+              <li class="menu-item">
+                <a href="/">Home</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/archives/">Archive</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/categories/gallery/">Gallery</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/tag/">Tag</a>
+              </li> 
+                   
+          
+          
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main">
+        <div class="flex-container">
+          <article id="post">
+
+  
+    <div class="post-head">
+    <div class="post-info">
+        <div class="tag-list">
+            
+                
+                    <span class="post-tag">
+                        <a href="/tags/C-%E7%BD%91%E7%BB%9C%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/">
+                            C#网络开发基础
+                        </a>
+                    </span>    
+                           
+            
+        </div>
+        <div class="post-title">
+            
+            
+                C#网络开发基础（十一）—— 简单的实现同步TCP通信【客户端】和【服务器】
+            
+            
+        </div>
+        <span class="post-date">
+            Dec 19, 2023
+        </span>
+    </div>
+    <div class="post-img">
+        
+            <div class="h-line-primary"></div>
+              
+    </div>
+</div>
+    <div class="post-content">
+    <p>了解了<strong>’套接字Socket重要API‘</strong>之后，我们可以根据以下的图片内容，自己去实现一个简单的、同步的、基于TCP通信的客户端和服务器</p>
+<p><img src="https://s2.loli.net/2023/12/19/DmbXEd3T2k5hMCo.png" alt="image1.png"></p>
+<h2 id="实践代码"><a href="#实践代码" class="headerlink" title="实践代码"></a>实践代码</h2><h3 id="服务端："><a href="#服务端：" class="headerlink" title="服务端："></a>服务端：</h3><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> System;</span><br><span class="line"><span class="keyword">using</span> System.Net;</span><br><span class="line"><span class="keyword">using</span> System.Net.Sockets;</span><br><span class="line"><span class="keyword">using</span> System.Text;</span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> 网络开发基础.基础<span class="title">TCP</span>同步服务端_客户端.实践</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">internal</span> <span class="keyword">class</span> <span class="title">SimpleServer</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>(<span class="params"><span class="built_in">string</span>[] args</span>)</span></span><br><span class="line">        &#123;</span><br><span class="line">            Console.WriteLine(<span class="string">&quot;服务端\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">            <span class="comment">//创建Socket套接字</span></span><br><span class="line">            Socket socket = <span class="keyword">new</span> Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);</span><br><span class="line">            <span class="keyword">try</span></span><br><span class="line">            &#123;</span><br><span class="line">                <span class="comment">//使 Socket 与一个本地终结点相关联</span></span><br><span class="line">                IPEndPoint ipEndPoing = <span class="keyword">new</span> IPEndPoint(IPAddress.Parse(<span class="string">&quot;127.0.0.1&quot;</span>), <span class="number">8080</span>);</span><br><span class="line">                socket.Bind(ipEndPoing);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">catch</span> (Exception ex)</span><br><span class="line">            &#123;</span><br><span class="line">                Console.WriteLine(<span class="string">&quot;绑定报错&quot;</span> + ex.Message);</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">//服务端监听数量</span></span><br><span class="line">            socket.Listen(<span class="number">10</span>);</span><br><span class="line"></span><br><span class="line">            <span class="comment">//等待客户端连接</span></span><br><span class="line">            Console.WriteLine(<span class="string">&quot;正在等待客户端连接......&quot;</span>);</span><br><span class="line">            Socket socketClient = socket.Accept();</span><br><span class="line">            Console.WriteLine(<span class="string">&quot;客户端连接成功&quot;</span>);</span><br><span class="line"></span><br><span class="line">            <span class="comment">//建立连接后，使用Send发送一条数据给客户端</span></span><br><span class="line">            socketClient.Send(Encoding.UTF8.GetBytes(<span class="string">&quot;欢迎连接到此服务器,请问有什么可以帮到您的吗？&quot;</span>));</span><br><span class="line"></span><br><span class="line">            <span class="comment">//创建一个专门用来接收数据的字节数组，存储客户端发送过来的数据,</span></span><br><span class="line">            Byte[] bytes = <span class="keyword">new</span> <span class="built_in">byte</span>[<span class="number">1024</span>];</span><br><span class="line">            <span class="built_in">int</span> dataVolume = socketClient.Receive(bytes); <span class="comment">//Receive会返回接收到信息的数据量</span></span><br><span class="line"></span><br><span class="line">            <span class="comment">//解析数据</span></span><br><span class="line">            Console.WriteLine(<span class="string">&quot;接收到来自&#123;0&#125;的信息,信息内容为&#123;1&#125;&quot;</span>, socketClient.RemoteEndPoint.ToString(), Encoding.UTF8.GetString(bytes, <span class="number">0</span>, dataVolume));</span><br><span class="line"></span><br><span class="line">            <span class="comment">//关闭套接字的双向通信，即同时关闭接收和发送功能。</span></span><br><span class="line">            socketClient.Shutdown(SocketShutdown.Both);</span><br><span class="line">            <span class="comment">//关闭套接字</span></span><br><span class="line">            socketClient.Close();</span><br><span class="line"></span><br><span class="line">            Console.WriteLine(<span class="string">&quot;按任意键退出&quot;</span>);</span><br><span class="line">            Console.ReadKey();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="客户端"><a href="#客户端" class="headerlink" title="客户端"></a>客户端</h3><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> System;</span><br><span class="line"><span class="keyword">using</span> System.Net;</span><br><span class="line"><span class="keyword">using</span> System.Net.Sockets;</span><br><span class="line"><span class="keyword">using</span> System.Text;</span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">ClientProgram</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">internal</span> <span class="keyword">class</span> <span class="title">Program</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>(<span class="params"><span class="built_in">string</span>[] args</span>)</span></span><br><span class="line">        &#123;</span><br><span class="line">            Console.WriteLine(<span class="string">&quot;客户端\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">            <span class="comment">//创建Socket套接字</span></span><br><span class="line">            Socket clientSocket = <span class="keyword">new</span> Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);</span><br><span class="line">            <span class="keyword">try</span></span><br><span class="line">            &#123;</span><br><span class="line">                Console.WriteLine(<span class="string">&quot;正在连接服务器&quot;</span>);</span><br><span class="line">                clientSocket.Connect(IPAddress.Parse(<span class="string">&quot;127.0.0.1&quot;</span>), <span class="number">8080</span>);</span><br><span class="line">                Console.WriteLine(<span class="string">&quot;连接服务器成功&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">catch</span> (Exception ex)</span><br><span class="line">            &#123;</span><br><span class="line">                Console.WriteLine(<span class="string">&quot;连接失败，错误信息：&quot;</span> + ex.Message);</span><br><span class="line">                <span class="keyword">throw</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            Byte[] bytes = <span class="keyword">new</span> <span class="built_in">byte</span>[<span class="number">1024</span>];</span><br><span class="line">            <span class="comment">//接收消息</span></span><br><span class="line">            <span class="built_in">int</span> dataVolume = clientSocket.Receive(bytes);</span><br><span class="line">            <span class="comment">//解析消息</span></span><br><span class="line">            Console.WriteLine(<span class="string">&quot;接受服务端发来的消息：&#123;0&#125;&quot;</span>,</span><br><span class="line">            Encoding.UTF8.GetString(bytes, <span class="number">0</span>, dataVolume));</span><br><span class="line"></span><br><span class="line">            <span class="comment">//发送消息</span></span><br><span class="line">            clientSocket.Send(Encoding.UTF8.GetBytes(<span class="string">&quot;兄弟上号&quot;</span>));</span><br><span class="line">            clientSocket.Shutdown(SocketShutdown.Both);</span><br><span class="line">            <span class="comment">//5.关闭套接字</span></span><br><span class="line">            clientSocket.Close();</span><br><span class="line"></span><br><span class="line">            Console.WriteLine(<span class="string">&quot;按任意键退出&quot;</span>);</span><br><span class="line">            Console.ReadKey();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>配合注释+’套接字Socket重要API‘观看，理解起来应该不是什么难事。</p>
+<p>笔记来源：【唐老狮】【ChatGPT】</p>
+<p><a target="_blank" rel="noopener" href="https://www.taikr.com/course/1378">https://www.taikr.com/course/1378</a></p>
+
+</div> 
+
+<script>
+    window.onload = detectors();
+</script>
+    <div class="post-footer">
+    <div class="h-line-primary"></div>
+    <nav class="post-nav">
+        <div class="prev-item">
+           
+        </div>
+        <div class="next-item">
+            
+                <div class="icon arrow-right"></div>
+                <div class="post-link">
+                  <a href="/2023/12/19/C-%E7%BD%91%E7%BB%9C%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80%EF%BC%88%E5%8D%81%EF%BC%89%E2%80%94%E2%80%94%E5%BA%8F%E5%88%97%E5%8C%96%E5%92%8C%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/">Next</a>  
+                </div>  
+            
+        </div>
+    </nav>
+</div>
+
+    
+      <div class="post-comment">
+
+    
+        <div id="vcomments"></div>
+        <script>
+            var META = ['nick', 'mail', 'link'];
+            var meta = 'nick,mail';
+            meta = meta.split(',').filter(item => {
+                return META.includes(item);
+            });
+            new Valine({
+                el: '#vcomments',
+                appId: 'sfC3VuatNBTX6bDuHmAD9VS6-gzGzoHsz',
+                appKey: 'Cy84cmf4GSkRYuweZjOgapLJ',
+                lang: 'en',
+                placeholder: 'Say something',
+                avatar: 'mp',
+                meta: meta
+            })
+        </script>    
+     
+
+     
+    
+    
+
+</div>
+     
+  
+</article>
+        </div>
+      </div>
+      
+      <div class="footer">
+    <div class="flex-container">
+        <div class="footer-text">
+            
+            
+            
+                Powered by <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a> & <a target="_blank" rel="noopener" href="https://github.com/zoeingwingkei/frame/">Frame</a>
+                
+        </div>
+    </div>
+</div>
+
+    </div>
+
+    
+    
+
+  </body>
+</html>
